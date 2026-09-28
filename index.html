@@ -1,32 +1,973 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
+
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
 <title>Time Tracker</title>
+
 <style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:light dark}body{margin:0;background:#f4f4f7;color:#17171a}.app{max-width:560px;margin:auto;min-height:100vh;padding:24px 18px;box-sizing:border-box}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}h1{font-size:25px;margin:0}.clock{font-variant-numeric:tabular-nums;font-size:18px;color:#666}.card{background:#fff;border:1px solid #ddd;border-radius:24px;padding:22px;margin-bottom:16px}.center{text-align:center}.tap{width:190px;height:190px;border-radius:50%;border:0;background:#111;color:#fff;font-size:22px;font-weight:700;cursor:pointer;box-shadow:0 8px 24px #0002}.tap:active{transform:scale(.97)}.sub{color:#777;font-size:14px;margin-top:14px}.row{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid #eee}.row:last-child{border-bottom:0}.time{font-variant-numeric:tabular-nums;font-weight:700}.topic{color:#555}.actions{display:flex;gap:10px}.btn{flex:1;padding:13px;border-radius:14px;border:1px solid #ccc;background:#fff;font-weight:600;cursor:pointer}.danger{color:#b00020}.empty{color:#777;text-align:center;padding:15px}.report{width:100%;padding:14px;border-radius:15px;border:0;background:#111;color:#fff;font-weight:700;cursor:pointer}dialog{border:0;border-radius:22px;padding:22px;max-width:calc(100% - 44px);width:360px}dialog::backdrop{background:#0007}input{width:100%;box-sizing:border-box;padding:14px;border-radius:12px;border:1px solid #ccc;font-size:16px;margin:12px 0} .dialog-actions{display:flex;gap:10px}.dialog-actions button{flex:1;padding:12px;border-radius:12px;border:1px solid #ccc}.primary{background:#111!important;color:#fff;border-color:#111!important}@media(prefers-color-scheme:dark){body{background:#111;color:#eee}.card{background:#1c1c1e;border-color:#333}.btn,input{background:#242426;color:#eee;border-color:#444}.topic,.sub,.clock{color:#aaa}.row{border-color:#333}dialog{background:#1c1c1e;color:#eee}}
-</style></head>
-<body><main class="app" id="app">
-<header><h1>ثبت زمان</h1><div class="clock" id="clock">--:--:--</div></header>
-<section class="card center"><button class="tap" id="tap">ثبت زمان</button><div class="sub">با هر ضربه، زمان فعلی ثبت می‌شود</div></section>
-<section class="card"><h2 style="font-size:18px;margin-top:0">ثبت‌های امروز</h2><div id="entries"></div></section>
-<button class="report" id="report">گزارش امروز و پاک‌کردن اطلاعات</button>
-<dialog id="topicDialog"><h3 style="margin-top:0">موضوع چیست؟</h3><input id="topic" maxlength="120" placeholder="مثلاً مطالعه KNN" autocomplete="off"><div class="dialog-actions"><button id="cancel">لغو</button><button class="primary" id="save">ذخیره</button></div></dialog>
-<dialog id="reportDialog"><h3 style="margin-top:0">گزارش امروز</h3><div id="reportText"></div><div class="dialog-actions" style="margin-top:15px"><button id="closeReport">بستن</button></div></dialog>
+
+/* =========================================================
+   بخش ۱ — تنظیمات کلی صفحه
+   ========================================================= */
+
+:root {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color-scheme: light dark;
+}
+
+body {
+    margin: 0;
+    background: #f4f4f7;
+    color: #17171a;
+}
+
+.app {
+    max-width: 560px;
+    margin: auto;
+    min-height: 100vh;
+    padding: 24px 18px;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   بخش ۲ — سربرگ و ساعت
+   ========================================================= */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 26px;
+}
+
+h1 {
+    font-size: 25px;
+    margin: 0;
+}
+
+.clock {
+    font-variant-numeric: tabular-nums;
+    font-size: 18px;
+    color: #666;
+}
+
+
+/* =========================================================
+   بخش ۳ — کارت‌های اصلی برنامه
+   ========================================================= */
+
+.card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 24px;
+    padding: 22px;
+    margin-bottom: 16px;
+}
+
+.center {
+    text-align: center;
+}
+
+
+/* =========================================================
+   بخش ۴ — دکمه اصلی ثبت زمان
+   ========================================================= */
+
+.tap {
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    border: 0;
+    background: #111;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 24px #0002;
+}
+
+.tap:active {
+    transform: scale(.97);
+}
+
+.sub {
+    color: #777;
+    font-size: 14px;
+    margin-top: 14px;
+}
+
+
+/* =========================================================
+   بخش ۵ — ردیف‌های اطلاعات
+   ========================================================= */
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 13px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.row:last-child {
+    border-bottom: 0;
+}
+
+.time {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+}
+
+.topic {
+    color: #555;
+}
+
+
+/* =========================================================
+   بخش ۶ — دکمه‌ها و ورودی‌ها
+   ========================================================= */
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    flex: 1;
+    padding: 13px;
+    border-radius: 14px;
+    border: 1px solid #ccc;
+    background: #fff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.danger {
+    color: #b00020;
+}
+
+.empty {
+    color: #777;
+    text-align: center;
+    padding: 15px;
+}
+
+input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    margin: 12px 0;
+}
+
+.primary {
+    background: #111 !important;
+    color: #fff;
+    border-color: #111 !important;
+}
+
+
+/* =========================================================
+   بخش ۷ — دکمه گزارش
+   ========================================================= */
+
+.report {
+    width: 100%;
+    padding: 14px;
+    border-radius: 15px;
+    border: 0;
+    background: #111;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   بخش ۸ — پنجره‌های بازشونده
+   ========================================================= */
+
+dialog {
+    border: 0;
+    border-radius: 22px;
+    padding: 22px;
+    max-width: calc(100% - 44px);
+    width: 360px;
+}
+
+dialog::backdrop {
+    background: #0007;
+}
+
+.dialog-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.dialog-actions button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+}
+
+
+/* =========================================================
+   بخش ۹ — حالت تاریک
+   ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+
+    body {
+        background: #111;
+        color: #eee;
+    }
+
+    .card {
+        background: #1c1c1e;
+        border-color: #333;
+    }
+
+    .btn,
+    input {
+        background: #242426;
+        color: #eee;
+        border-color: #444;
+    }
+
+    .topic,
+    .sub,
+    .clock {
+        color: #aaa;
+    }
+
+    .row {
+        border-color: #333;
+    }
+
+    dialog {
+        background: #1c1c1e;
+        color: #eee;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<main class="app" id="app">
+
+
+<!-- =======================================================
+     بخش ۱۰ — سربرگ برنامه
+     نام برنامه و ساعت فعلی اینجا قرار دارد.
+     ======================================================= -->
+
+<header>
+
+    <h1>ثبت زمان</h1>
+
+    <div class="clock" id="clock">
+        --:--:--
+    </div>
+
+</header>
+
+
+<!-- =======================================================
+     بخش ۱۱ — ثبت زمان
+     با زدن دکمه، برنامه از کاربر موضوع فعالیت را می‌پرسد.
+     ======================================================= -->
+
+<section class="card center">
+
+    <button class="tap" id="tap">
+        ثبت زمان
+    </button>
+
+    <div class="sub">
+        با هر ضربه، زمان فعلی ثبت می‌شود
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     بخش ۱۲ — اهداف فردا
+
+     در این قسمت کاربر می‌تواند کارهای فردا را وارد کند.
+     هر هدف یک checkbox دارد تا بعد از انجام، علامت زده شود.
+     ======================================================= -->
+
+<section class="card">
+
+    <h2 style="font-size:18px;margin-top:0">
+        اهداف فردا
+    </h2>
+
+    <div class="actions">
+
+        <input
+            id="goalInput"
+            maxlength="120"
+            placeholder="مثلاً ۱ ساعت AI"
+            autocomplete="off"
+        >
+
+        <button
+            class="primary btn"
+            id="addGoal"
+        >
+            افزودن هدف
+        </button>
+
+    </div>
+
+    <div id="goals"></div>
+
+</section>
+
+
+<!-- =======================================================
+     بخش ۱۳ — ثبت‌های امروز
+
+     تمام فعالیت‌هایی که در ۲۴ ساعت گذشته ثبت شده‌اند
+     در این قسمت نمایش داده می‌شوند.
+     ======================================================= -->
+
+<section class="card">
+
+    <h2 style="font-size:18px;margin-top:0">
+        ثبت‌های امروز
+    </h2>
+
+    <div id="entries"></div>
+
+</section>
+
+
+<!-- =======================================================
+     بخش ۱۴ — گزارش روزانه
+     ======================================================= -->
+
+<button class="report" id="report">
+    گزارش امروز و پاک‌کردن اطلاعات
+</button>
+
+
+<!-- =======================================================
+     بخش ۱۵ — پنجره ثبت موضوع
+
+     وقتی کاربر روی «ثبت زمان» می‌زند،
+     این پنجره باز می‌شود و موضوع فعالیت را می‌گیرد.
+     ======================================================= -->
+
+<dialog id="topicDialog">
+
+    <h3 style="margin-top:0">
+        موضوع چیست؟
+    </h3>
+
+    <input
+        id="topic"
+        maxlength="120"
+        placeholder="مثلاً مطالعه KNN"
+        autocomplete="off"
+    >
+
+    <div class="dialog-actions">
+
+        <button id="cancel">
+            لغو
+        </button>
+
+        <button class="primary" id="save">
+            ذخیره
+        </button>
+
+    </div>
+
+</dialog>
+
+
+<!-- =======================================================
+     بخش ۱۶ — پنجره گزارش
+     ======================================================= -->
+
+<dialog id="reportDialog">
+
+    <h3 style="margin-top:0">
+        گزارش امروز
+    </h3>
+
+    <div id="reportText"></div>
+
+    <div
+        class="dialog-actions"
+        style="margin-top:15px"
+    >
+
+        <button id="closeReport">
+            بستن
+        </button>
+
+    </div>
+
+</dialog>
+
+
 <script>
-const KEY='time_tracker_entries_v1';
-const DAY=24*60*60*1000;
-const $=id=>document.getElementById(id);
-function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]').filter(e=>Date.now()-e.timestamp<DAY)}catch{return []}}
-function save(a){localStorage.setItem(KEY,JSON.stringify(a))}
-function fmt(ts){return new Date(ts).toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
-function render(){const box=$('entries'), a=load(); save(a); box.innerHTML=''; if(!a.length){box.innerHTML='<div class="empty">هنوز چیزی ثبت نشده.</div>';return} a.forEach(e=>{const r=document.createElement('div');r.className='row';r.innerHTML=`<span class="time">${fmt(e.timestamp)}</span><span class="topic"></span>`;r.querySelector('.topic').textContent=e.topic;box.appendChild(r)})}
-function clock(){$('clock').textContent=new Date().toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
-$('tap').onclick=()=>{$('topic').value='';$('topicDialog').showModal();setTimeout(()=>$('topic').focus(),50)};
-$('cancel').onclick=()=>$('topicDialog').close();
-$('save').onclick=()=>{const topic=$('topic').value.trim();if(!topic)return;const a=load();a.push({timestamp:Date.now(),topic});save(a);$('topicDialog').close();render()};
-$('topic').onkeydown=e=>{if(e.key==='Enter')$('save').click()};
-$('report').onclick=()=>{const a=load();$('reportText').innerHTML=a.length?a.map(e=>`<div class="row"><span class="time">${fmt(e.timestamp)}</span><span class="topic"></span></div>`).join(''):'<div class="empty">امروز موردی ثبت نشده.</div>';[...$('reportText').querySelectorAll('.topic')].forEach((n,i)=>n.textContent=a[i].topic);$('reportDialog').showModal();save([]);render()};
-$('closeReport').onclick=()=>$('reportDialog').close();
-clock();setInterval(clock,1000);render();setInterval(render,60000);
-</script></main></body></html>
+
+/* =========================================================
+   بخش ۱۷ — تنظیمات اصلی برنامه
+   ========================================================= */
+
+// کلید ذخیره فعالیت‌های زمانی در حافظه گوشی
+const KEY = 'time_tracker_entries_v1';
+
+// مدت زمانی که یک ثبت فعالیت معتبر است.
+// فعلاً اطلاعات بیشتر از ۲۴ ساعت نمایش داده نمی‌شوند.
+const DAY = 24 * 60 * 60 * 1000;
+
+// کلید جداگانه برای ذخیره اهداف
+const GOAL_KEY = 'time_tracker_goals_v1';
+
+// میانبر برای پیدا کردن عناصر صفحه
+const $ = id => document.getElementById(id);
+
+
+/* =========================================================
+   بخش ۱۸ — مدیریت ثبت‌های زمانی
+   ========================================================= */
+
+// فعالیت‌های ذخیره‌شده را از حافظه گوشی می‌خواند.
+function load() {
+
+    try {
+
+        return JSON
+            .parse(localStorage.getItem(KEY) || '[]')
+            .filter(e => Date.now() - e.timestamp < DAY);
+
+    } catch {
+
+        return [];
+
+    }
+}
+
+
+// فهرست فعالیت‌ها را در حافظه گوشی ذخیره می‌کند.
+function save(a) {
+
+    localStorage.setItem(
+        KEY,
+        JSON.stringify(a)
+    );
+
+}
+
+
+// یک timestamp را به ساعت قابل خواندن تبدیل می‌کند.
+function fmt(ts) {
+
+    return new Date(ts).toLocaleTimeString(
+        'fa-IR',
+        {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        }
+    );
+
+}
+
+
+/* =========================================================
+   بخش ۱۹ — مدیریت اهداف فردا
+   ========================================================= */
+
+// اهداف ذخیره‌شده را از حافظه گوشی می‌خواند.
+function loadGoals() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(GOAL_KEY) || '[]'
+        );
+
+    } catch {
+
+        return [];
+
+    }
+
+}
+
+
+// فهرست اهداف را در حافظه گوشی ذخیره می‌کند.
+function saveGoals(a) {
+
+    localStorage.setItem(
+        GOAL_KEY,
+        JSON.stringify(a)
+    );
+
+}
+
+
+/* =========================================================
+   بخش ۲۰ — نمایش اهداف فردا
+   ========================================================= */
+
+// این تابع تمام اهداف را روی صفحه نمایش می‌دهد.
+// همچنین امکان تیک‌زدن و حذف هر هدف را ایجاد می‌کند.
+
+function renderGoals() {
+
+    const box = $('goals');
+    const goals = loadGoals();
+
+    box.innerHTML = '';
+
+
+    // اگر هیچ هدفی وجود نداشته باشد
+    if (!goals.length) {
+
+        box.innerHTML =
+            '<div class="empty">هنوز هدفی برای فردا تعیین نکرده‌ای.</div>';
+
+        return;
+    }
+
+
+    // ساختن ردیف برای هر هدف
+    goals.forEach((goal, index) => {
+
+        const row = document.createElement('div');
+
+        row.className = 'row';
+
+
+        row.innerHTML = `
+
+            <label
+                style="
+                    display:flex;
+                    align-items:center;
+                    gap:10px;
+                    flex:1
+                "
+            >
+
+                <input
+                    type="checkbox"
+                    ${goal.done ? 'checked' : ''}
+                    data-goal-index="${index}"
+                    style="
+                        width:auto;
+                        margin:0
+                    "
+                >
+
+                <span class="topic"></span>
+
+            </label>
+
+            <button
+                class="btn danger"
+                data-delete-goal="${index}"
+                style="
+                    flex:0 0 auto;
+                    padding:7px 10px
+                "
+            >
+                حذف
+            </button>
+
+        `;
+
+
+        // متن هدف را به صورت امن وارد صفحه می‌کنیم.
+        row.querySelector('.topic').textContent = goal.text;
+
+        box.appendChild(row);
+
+    });
+
+
+    // مدیریت تیک خوردن اهداف
+    box.querySelectorAll('[data-goal-index]')
+        .forEach(checkbox => {
+
+            checkbox.onchange = () => {
+
+                const goals = loadGoals();
+
+                const index =
+                    Number(checkbox.dataset.goalIndex);
+
+                goals[index].done =
+                    checkbox.checked;
+
+                saveGoals(goals);
+
+                renderGoals();
+
+            };
+
+        });
+
+
+    // مدیریت حذف اهداف
+    box.querySelectorAll('[data-delete-goal]')
+        .forEach(button => {
+
+            button.onclick = () => {
+
+                const goals = loadGoals();
+
+                const index =
+                    Number(button.dataset.deleteGoal);
+
+                goals.splice(index, 1);
+
+                saveGoals(goals);
+
+                renderGoals();
+
+            };
+
+        });
+
+}
+
+
+/* =========================================================
+   بخش ۲۱ — نمایش ثبت‌های امروز
+   ========================================================= */
+
+function render() {
+
+    const box = $('entries');
+
+    const entries = load();
+
+    // فعالیت‌های قدیمی را دوباره ذخیره نمی‌کنیم.
+    // فقط اطلاعات معتبر را نگه می‌داریم.
+    save(entries);
+
+    box.innerHTML = '';
+
+
+    // اگر فعالیتی وجود نداشته باشد
+    if (!entries.length) {
+
+        box.innerHTML =
+            '<div class="empty">هنوز چیزی ثبت نشده.</div>';
+
+        return;
+    }
+
+
+    // نمایش تک‌تک فعالیت‌ها
+    entries.forEach(entry => {
+
+        const row =
+            document.createElement('div');
+
+        row.className = 'row';
+
+
+        row.innerHTML = `
+
+            <span class="time">
+                ${fmt(entry.timestamp)}
+            </span>
+
+            <span class="topic"></span>
+
+        `;
+
+
+        // قرار دادن موضوع فعالیت
+        row.querySelector('.topic').textContent =
+            entry.topic;
+
+        box.appendChild(row);
+
+    });
+
+}
+
+
+/* =========================================================
+   بخش ۲۲ — ساعت زنده
+   ========================================================= */
+
+function clock() {
+
+    $('clock').textContent =
+        new Date().toLocaleTimeString(
+            'fa-IR',
+            {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            }
+        );
+
+}
+
+
+/* =========================================================
+   بخش ۲۳ — باز کردن پنجره ثبت زمان
+   ========================================================= */
+
+$('tap').onclick = () => {
+
+    $('topic').value = '';
+
+    $('topicDialog').showModal();
+
+    setTimeout(() => {
+
+        $('topic').focus();
+
+    }, 50);
+
+};
+
+
+/* =========================================================
+   بخش ۲۴ — لغو ثبت زمان
+   ========================================================= */
+
+$('cancel').onclick = () => {
+
+    $('topicDialog').close();
+
+};
+
+
+/* =========================================================
+   بخش ۲۵ — ذخیره یک فعالیت جدید
+   ========================================================= */
+
+$('save').onclick = () => {
+
+    const topic =
+        $('topic').value.trim();
+
+
+    // اگر کاربر چیزی وارد نکرده باشد
+    // چیزی ذخیره نمی‌کنیم.
+    if (!topic) return;
+
+
+    const entries = load();
+
+
+    // فعالیت جدید را اضافه می‌کنیم.
+    entries.push({
+
+        timestamp: Date.now(),
+
+        topic: topic
+
+    });
+
+
+    save(entries);
+
+    $('topicDialog').close();
+
+    render();
+
+};
+
+
+/* =========================================================
+   بخش ۲۶ — ثبت فعالیت با Enter
+   ========================================================= */
+
+$('topic').onkeydown = event => {
+
+    if (event.key === 'Enter') {
+
+        $('save').click();
+
+    }
+
+};
+
+
+/* =========================================================
+   بخش ۲۷ — اضافه کردن هدف جدید
+   ========================================================= */
+
+function addGoal() {
+
+    const text =
+        $('goalInput').value.trim();
+
+
+    // اگر متن خالی بود، چیزی اضافه نکن.
+    if (!text) return;
+
+
+    const goals = loadGoals();
+
+
+    // هدف جدید
+    goals.push({
+
+        text: text,
+
+        done: false
+
+    });
+
+
+    saveGoals(goals);
+
+
+    // خالی کردن کادر ورود
+    $('goalInput').value = '';
+
+
+    // نمایش دوباره اهداف
+    renderGoals();
+
+}
+
+
+/* =========================================================
+   بخش ۲۸ — دکمه افزودن هدف
+   ========================================================= */
+
+$('addGoal').onclick = addGoal;
+
+
+/* =========================================================
+   بخش ۲۹ — اضافه کردن هدف با Enter
+   ========================================================= */
+
+$('goalInput').onkeydown = event => {
+
+    if (event.key === 'Enter') {
+
+        addGoal();
+
+    }
+
+};
+
+
+/* =========================================================
+   بخش ۳۰ — گزارش امروز
+   ========================================================= */
+
+$('report').onclick = () => {
+
+    const entries = load();
+
+
+    // ساخت گزارش
+    $('reportText').innerHTML =
+        entries.length
+
+            ? entries
+                .map(entry => `
+
+                    <div class="row">
+
+                        <span class="time">
+                            ${fmt(entry.timestamp)}
+                        </span>
+
+                        <span class="topic"></span>
+
+                    </div>
+
+                `)
+                .join('')
+
+            : '<div class="empty">امروز موردی ثبت نشده.</div>';
+
+
+    // قرار دادن متن فعالیت‌ها
+    [
+        ...$('reportText')
+            .querySelectorAll('.topic')
+    ]
+    .forEach((node, index) => {
+
+        node.textContent =
+            entries[index].topic;
+
+    });
+
+
+    // نمایش گزارش
+    $('reportDialog').showModal();
+
+
+    // پاک کردن ثبت‌های زمانی
+    save([]);
+
+    render();
+
+};
+
+
+/* =========================================================
+   بخش ۳۱ — بستن گزارش
+   ========================================================= */
+
+$('closeReport').onclick = () => {
+
+    $('reportDialog').close();
+
+};
+
+
+/* =========================================================
+   بخش ۳۲ — راه‌اندازی اولیه برنامه
+   ========================================================= */
+
+// نمایش ساعت
+clock();
+
+
+// به‌روزرسانی ساعت هر یک ثانیه
+setInterval(clock, 1000);
+
+
+// نمایش فعالیت‌ها
+render();
+
+
+// نمایش اهداف
+renderGoals();
+
+
+// هر یک دقیقه فعالیت‌ها را بررسی می‌کنیم
+// تا موارد قدیمی از صفحه حذف شوند.
+setInterval(render, 60000);
+
+</script>
+
+</main>
+
+</body>
+
+</html>
