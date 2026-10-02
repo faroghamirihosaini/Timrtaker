@@ -1,2115 +1,2048 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>ثبت زمان</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Tahoma, Arial, sans-serif;
-      background: #f4f4f4;
-      color: #222;
-    }
-
-    body.dark {
-      background: #181818;
-      color: #eee;
-    }
-
-    button,
-    input {
-      font-family: inherit;
-    }
-
-    /* =========================
-       صفحه قفل
-    ========================= */
-
-    #lockScreen {
-      position: fixed;
-      inset: 0;
-      background: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-
-    body.dark #lockScreen {
-      background: #181818;
-    }
-
-    .lockBox {
-      width: min(90%, 360px);
-      background: white;
-      padding: 25px;
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 5px 25px rgba(0,0,0,.12);
-    }
-
-    body.dark .lockBox {
-      background: #252525;
-    }
-
-    .lockBox input {
-      width: 100%;
-      padding: 12px;
-      margin: 15px 0;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      text-align: center;
-      font-size: 18px;
-    }
-
-    .lockBox button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      background: #222;
-      color: white;
-    }
-
-    #lockError {
-      color: #e74c3c;
-      margin-top: 10px;
-      display: none;
-    }
-
-    /* =========================
-       هدر
-    ========================= */
-
-    header {
-      padding: 20px;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0 0 8px;
-      font-size: 28px;
-    }
-
-    #clock {
-      font-size: 20px;
-      opacity: .7;
-    }
-
-    /* =========================
-       صفحه اصلی
-    ========================= */
-
-    .container {
-      width: min(1100px, 94%);
-      margin: auto;
-    }
-
-    .mainCard {
-      background: white;
-      border-radius: 25px;
-      padding: 30px;
-      min-height: 500px;
-      box-shadow: 0 5px 25px rgba(0,0,0,.08);
-    }
-
-    body.dark .mainCard {
-      background: #252525;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 30px;
-      margin-top: 40px;
-      flex-wrap: wrap;
-    }
-
-    .bigButton {
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      border: none;
-      cursor: pointer;
-      background: #222;
-      color: white;
-      font-size: 22px;
-      transition: .2s;
-    }
-
-    .bigButton:hover {
-      transform: scale(1.04);
-    }
-
-    #taskTap {
-      background: #444;
-    }
-
-    /* =========================
-       استراحت
-    ========================= */
-
-    #restControls {
-      display: none;
-      text-align: center;
-      margin-top: 25px;
-    }
-
-    #restTap {
-      padding: 12px 25px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      background: #f39c12;
-      color: white;
-      font-size: 16px;
-    }
-
-    /* =========================
-       اهداف
-    ========================= */
-
-    #goals {
-      margin-top: 40px;
-    }
-
-    #goals h2 {
-      margin-bottom: 15px;
-    }
-
-    .goalItem {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px;
-      margin-bottom: 8px;
-      background: #f2f2f2;
-      border-radius: 12px;
-    }
-
-    body.dark .goalItem {
-      background: #333;
-    }
-
-    .goalText {
-      flex: 1;
-    }
-
-    .goalTime {
-      font-size: 13px;
-      opacity: .7;
-    }
-
-    .deleteGoal {
-      border: none;
-      background: #e74c3c;
-      color: white;
-      border-radius: 7px;
-      padding: 6px 9px;
-      cursor: pointer;
-    }
-
-    /* =========================
-       دکمه منو
-    ========================= */
-
-    #menuButton {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 2000;
-      width: 48px;
-      height: 48px;
-      border: none;
-      border-radius: 50%;
-      background: #222;
-      color: white;
-      cursor: pointer;
-      font-size: 22px;
-    }
-
-    /* =========================
-       پس‌زمینه Drawer
-    ========================= */
-
-    #backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.4);
-      display: none;
-      z-index: 1998;
-    }
-
-    #backdrop.show {
-      display: block;
-    }
-
-    /* =========================
-       Drawer
-    ========================= */
-
-    #drawer {
-      position: fixed;
-      top: 0;
-      right: -400px;
-      width: min(400px, 90%);
-      height: 100%;
-      background: white;
-      z-index: 1999;
-      padding: 25px;
-      overflow-y: auto;
-      transition: right .25s;
-      box-shadow: -5px 0 20px rgba(0,0,0,.15);
-    }
-
-    body.dark #drawer {
-      background: #252525;
-    }
-
-    #drawer.open {
-      right: 0;
-    }
-
-    #drawer h2 {
-      margin-top: 0;
-    }
-
-    .entry {
-      padding: 10px;
-      margin-bottom: 8px;
-      border-radius: 10px;
-      background: #f1f1f1;
-    }
-
-    body.dark .entry {
-      background: #333;
-    }
-
-    /* =========================
-       فرم اهداف
-    ========================= */
-
-    .goalForm {
-      margin-top: 30px;
-    }
-
-    .goalForm input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 8px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
-
-    .goalForm button,
-    #report {
-      width: 100%;
-      padding: 11px;
-      border: none;
-      border-radius: 9px;
-      cursor: pointer;
-      background: #222;
-      color: white;
-    }
-
-    /* =========================
-       Dialog
-    ========================= */
-
-    dialog {
-      width: min(500px, 92%);
-      border: none;
-      border-radius: 18px;
-      padding: 25px;
-      box-shadow: 0 10px 40px rgba(0,0,0,.25);
-    }
-
-    dialog::backdrop {
-      background: rgba(0,0,0,.5);
-    }
-
-    body.dark dialog {
-      background: #252525;
-      color: white;
-    }
-
-    dialog input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      margin: 10px 0;
-    }
-
-    dialog button {
-      padding: 10px 15px;
-      border: none;
-      border-radius: 9px;
-      cursor: pointer;
-      margin: 4px;
-    }
-
-    #save {
-      background: #222;
-      color: white;
-    }
-
-    #cancel,
-    #closeReport {
-      background: #ddd;
-    }
-
-    /* =========================
-       پیشنهاد اهداف
-    ========================= */
-
-    #goalSuggestions {
-      margin: 10px 0;
-    }
-
-    .suggestion {
-      padding: 10px;
-      margin-bottom: 7px;
-      background: #eee;
-      border-radius: 9px;
-      cursor: pointer;
-    }
-
-    body.dark .suggestion {
-      background: #333;
-    }
-
-    /* =========================
-       کیفیت کار
-    ========================= */
-
-    .qualityButtons {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-
-    .qualityButtons button {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      background: #222;
-      color: white;
-    }
-
-    /* =========================
-       گزارش
-    ========================= */
-
-    .reportItem {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-
-      padding: 14px;
-      margin-bottom: 12px;
-
-      border: 1px solid #ddd;
-      border-radius: 12px;
-
-      background: #fafafa;
-    }
-
-    body.dark .reportItem {
-      background: #303030;
-      border-color: #444;
-    }
-
-    .reportItemContent {
-      flex: 1;
-      line-height: 1.8;
-    }
-
-    .deleteReportBtn {
-      flex-shrink: 0;
-
-      border: none;
-      border-radius: 8px;
-
-      padding: 8px 12px;
-
-      cursor: pointer;
-
-      background: #e74c3c;
-      color: white;
-    }
-
-    .deleteReportBtn:hover {
-      opacity: .85;
-    }
-
-    /* =========================
-       موبایل
-    ========================= */
-
-    @media (max-width: 760px) {
-      header h1 {
-        font-size: 24px;
-      }
-
-      .mainCard {
-        padding: 20px;
-      }
-
-      .bigButton {
-        width: 150px;
-        height: 150px;
-        font-size: 19px;
-      }
-
-      .reportItem {
-        align-items: flex-start;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ثبت زمان</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Tahoma, Arial, sans-serif;
+  background: #f4f4f4;
+  color: #222;
+}
+
+body.dark {
+  background: #181818;
+  color: #eee;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+/* =========================
+   Lock Screen
+========================= */
+
+#lockScreen {
+  position: fixed;
+  inset: 0;
+  background: #f4f4f4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+body.dark #lockScreen {
+  background: #181818;
+}
+
+.lockBox {
+  width: min(90%, 350px);
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0,0,0,.12);
+}
+
+body.dark .lockBox {
+  background: #252525;
+}
+
+.lockBox input {
+  width: 100%;
+  padding: 12px;
+  margin: 15px 0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.lockBox button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #222;
+  color: white;
+  cursor: pointer;
+}
+
+#lockError {
+  display: none;
+  color: #e74c3c;
+  margin-top: 10px;
+}
+
+/* =========================
+   Header
+========================= */
+
+header {
+  text-align: center;
+  padding: 20px;
+}
+
+header h1 {
+  margin: 0 0 8px;
+}
+
+#clock {
+  font-size: 20px;
+  opacity: .7;
+}
+
+/* =========================
+   Main
+========================= */
+
+.container {
+  width: min(1100px, 94%);
+  margin: auto;
+}
+
+.mainCard {
+  background: white;
+  border-radius: 25px;
+  padding: 30px;
+  min-height: 500px;
+  box-shadow: 0 5px 25px rgba(0,0,0,.08);
+}
+
+body.dark .mainCard {
+  background: #252525;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+.bigButton {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: #222;
+  color: white;
+  font-size: 22px;
+}
+
+#taskTap {
+  background: #444;
+}
+
+/* =========================
+   Rest
+========================= */
+
+#restControls {
+  display: none;
+  text-align: center;
+  margin-top: 25px;
+}
+
+#restTap {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  background: #f39c12;
+  color: white;
+}
+
+/* =========================
+   Goals
+========================= */
+
+#goals {
+  margin-top: 40px;
+}
+
+.goalItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  margin-bottom: 8px;
+  background: #f2f2f2;
+  border-radius: 12px;
+}
+
+body.dark .goalItem {
+  background: #333;
+}
+
+.goalText {
+  flex: 1;
+}
+
+.goalTime {
+  font-size: 13px;
+  opacity: .7;
+}
+
+.deleteGoal {
+  border: none;
+  background: #e74c3c;
+  color: white;
+  border-radius: 7px;
+  padding: 6px 9px;
+  cursor: pointer;
+}
+
+/* =========================
+   Menu
+========================= */
+
+#menuButton {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 2000;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: #222;
+  color: white;
+  cursor: pointer;
+  font-size: 22px;
+}
+
+#backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.4);
+  display: none;
+  z-index: 1998;
+}
+
+#backdrop.show {
+  display: block;
+}
+
+/* =========================
+   Drawer
+========================= */
+
+#drawer {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: min(400px, 90%);
+  height: 100%;
+  background: white;
+  z-index: 1999;
+  padding: 25px;
+  overflow-y: auto;
+  transition: right .25s;
+  box-shadow: -5px 0 20px rgba(0,0,0,.15);
+}
+
+body.dark #drawer {
+  background: #252525;
+}
+
+#drawer.open {
+  right: 0;
+}
+
+.entry {
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  background: #f1f1f1;
+}
+
+body.dark .entry {
+  background: #333;
+}
+
+/* =========================
+   Goal Form
+========================= */
+
+.goalForm {
+  margin-top: 30px;
+}
+
+.goalForm input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.goalForm button,
+#report {
+  width: 100%;
+  padding: 11px;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  background: #222;
+  color: white;
+}
+
+/* =========================
+   Dialogs
+========================= */
+
+dialog {
+  width: min(500px, 92%);
+  border: none;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.25);
+}
+
+dialog::backdrop {
+  background: rgba(0,0,0,.5);
+}
+
+body.dark dialog {
+  background: #252525;
+  color: white;
+}
+
+dialog input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+dialog button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  margin: 4px;
+}
+
+#save {
+  background: #222;
+  color: white;
+}
+
+#cancel,
+#closeReport {
+  background: #ddd;
+}
+
+/* =========================
+   Goal Suggestions
+========================= */
+
+.suggestion {
+  padding: 10px;
+  margin-bottom: 7px;
+  background: #eee;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+body.dark .suggestion {
+  background: #333;
+}
+
+/* =========================
+   Quality
+========================= */
+
+.qualityButtons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.qualityButtons button {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: #222;
+  color: white;
+}
+
+/* =========================
+   Report Delete
+========================= */
+
+.reportItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.reportDelete {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: #e74c3c;
+  color: white;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.reportDelete:hover {
+  opacity: .85;
+}
+
+/* =========================
+   Mobile
+========================= */
+
+@media (max-width: 760px) {
+
+  .mainCard {
+    padding: 20px;
+  }
+
+  .bigButton {
+    width: 150px;
+    height: 150px;
+    font-size: 19px;
+  }
+
+}
+</style>
 </head>
 
 <body>
 
-  <!-- =========================
-       صفحه قفل
-  ========================= -->
+<!-- =========================
+     Lock
+========================= -->
 
-  <div id="lockScreen">
-    <div class="lockBox">
-      <h2>برنامه قفل است</h2>
+<div id="lockScreen">
 
-      <input
-        id="accessCode"
-        type="password"
-        inputmode="numeric"
-        placeholder="رمز ورود"
-      >
+  <div class="lockBox">
 
-      <button id="unlockButton">
-        ورود
-      </button>
+    <h2>برنامه قفل است</h2>
 
-      <div id="lockError">
-        رمز اشتباه است
-      </div>
+    <input
+      id="accessCode"
+      type="password"
+      inputmode="numeric"
+      placeholder="رمز ورود"
+    >
+
+    <button id="unlockButton">
+      ورود
+    </button>
+
+    <div id="lockError">
+      رمز اشتباه است
     </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     Menu
+========================= -->
+
+<button id="menuButton" aria-expanded="false">
+  ☰
+</button>
+
+<div id="backdrop"></div>
+
+<aside id="drawer">
+
+  <h2>امروز</h2>
+
+  <div id="drawerEntries"></div>
+
+
+  <div class="goalForm">
+
+    <h3>هدف جدید</h3>
+
+    <input
+      id="goalInput"
+      type="text"
+      placeholder="مثلاً مطالعه هوش مصنوعی"
+    >
+
+    <input
+      id="goalStart"
+      type="time"
+    >
+
+    <input
+      id="goalEnd"
+      type="time"
+    >
+
+    <button id="addGoal">
+      افزودن هدف
+    </button>
+
   </div>
 
 
-  <!-- =========================
-       دکمه منو
-  ========================= -->
+  <div style="margin-top:30px">
 
-  <button id="menuButton" aria-expanded="false">
-    ☰
-  </button>
+    <h3>گزارش روز</h3>
 
-  <div id="backdrop"></div>
+    <input
+      id="reportDate"
+      type="date"
+      style="
+        width:100%;
+        padding:10px;
+        margin-bottom:10px;
+        border:1px solid #ccc;
+        border-radius:8px;
+      "
+    >
+
+    <button id="report">
+      مشاهده گزارش
+    </button>
+
+  </div>
+
+</aside>
 
 
-  <!-- =========================
-       Drawer
-  ========================= -->
+<!-- =========================
+     Header
+========================= -->
 
-  <aside id="drawer">
+<header>
 
-    <h2>امروز</h2>
+  <h1>ثبت زمان</h1>
 
-    <div id="drawerEntries"></div>
+  <div id="clock">
+    --:--
+  </div>
+
+</header>
 
 
-    <!-- اهداف -->
+<!-- =========================
+     Main
+========================= -->
 
-    <div class="goalForm">
+<main class="container">
 
-      <h3>هدف جدید</h3>
+  <section class="mainCard">
 
-      <input
-        id="goalInput"
-        type="text"
-        placeholder="مثلاً مطالعه هوش مصنوعی"
+    <div class="buttons">
+
+      <button
+        id="tap"
+        class="bigButton"
       >
+        ثبت زمان
+      </button>
 
-      <input
-        id="goalStart"
-        type="time"
+      <button
+        id="taskTap"
+        class="bigButton"
       >
-
-      <input
-        id="goalEnd"
-        type="time"
-      >
-
-      <button id="addGoal">
-        افزودن هدف
+        ثبت کار
       </button>
 
     </div>
 
 
-    <!-- گزارش -->
+    <div id="restControls">
 
-    <div style="margin-top:30px">
-
-      <h3>گزارش روز</h3>
-
-      <input
-        id="reportDate"
-        type="date"
-        style="
-          width:100%;
-          padding:10px;
-          margin-bottom:10px;
-          border:1px solid #ccc;
-          border-radius:8px;
-        "
-      >
-
-      <button id="report">
-        مشاهده گزارش
+      <button id="restTap">
+        شروع استراحت
       </button>
 
     </div>
 
-  </aside>
 
+    <section id="goals">
 
-  <!-- =========================
-       هدر
-  ========================= -->
-
-  <header>
-
-    <h1>ثبت زمان</h1>
-
-    <div id="clock">
-      --:--
-    </div>
-
-  </header>
-
-
-  <!-- =========================
-       محتوای اصلی
-  ========================= -->
-
-  <main class="container">
-
-    <section class="mainCard">
-
-      <div class="buttons">
-
-        <button
-          id="tap"
-          class="bigButton"
-        >
-          ثبت زمان
-        </button>
-
-
-        <button
-          id="taskTap"
-          class="bigButton"
-        >
-          ثبت کار
-        </button>
-
-      </div>
-
-
-      <!-- استراحت -->
-
-      <div id="restControls">
-
-        <button id="restTap">
-          شروع استراحت
-        </button>
-
-      </div>
-
-
-      <!-- اهداف -->
-
-      <section id="goals">
-
-        <h2>
-          اهداف فردا
-        </h2>
-
-      </section>
+      <h2>
+        اهداف فردا
+      </h2>
 
     </section>
 
-  </main>
+  </section>
+
+</main>
 
 
-  <!-- =========================
-       دیالوگ ثبت زمان / کار
-  ========================= -->
+<!-- =========================
+     Topic Dialog
+========================= -->
 
-  <dialog id="topicDialog">
+<dialog id="topicDialog">
 
-    <h3 id="topicDialogTitle">
-      موضوع
-    </h3>
+  <h3 id="topicDialogTitle">
+    موضوع
+  </h3>
 
-    <input
-      id="topic"
-      type="text"
-      placeholder="چه کاری انجام دادی؟"
-    >
+  <input
+    id="topic"
+    type="text"
+    placeholder="چه کاری انجام دادی؟"
+  >
 
-    <div id="goalSuggestions"></div>
+  <div id="goalSuggestions"></div>
 
-    <div style="text-align:center">
+  <div style="text-align:center">
 
-      <button id="save">
-        ثبت
-      </button>
+    <button id="save">
+      ثبت
+    </button>
 
-      <button id="cancel">
-        لغو
-      </button>
+    <button id="cancel">
+      لغو
+    </button>
 
-    </div>
+  </div>
 
-  </dialog>
-
-
-  <!-- =========================
-       دیالوگ کیفیت
-  ========================= -->
-
-  <dialog id="qualityDialog">
-
-    <h3>
-      کیفیت این کار چطور بود؟
-    </h3>
-
-    <p>
-      از ۱ تا ۵ انتخاب کن
-    </p>
-
-    <div class="qualityButtons">
-
-      <button data-quality="1">1</button>
-      <button data-quality="2">2</button>
-      <button data-quality="3">3</button>
-      <button data-quality="4">4</button>
-      <button data-quality="5">5</button>
-
-    </div>
-
-  </dialog>
+</dialog>
 
 
-  <!-- =========================
-       دیالوگ گزارش
-  ========================= -->
+<!-- =========================
+     Quality Dialog
+========================= -->
 
-  <dialog id="reportDialog">
+<dialog id="qualityDialog">
 
-    <h3>
-      گزارش روز
-    </h3>
+  <h3>
+    کیفیت این کار چطور بود؟
+  </h3>
 
-    <div id="reportText"></div>
+  <p>
+    از ۱ تا ۵ انتخاب کن
+  </p>
 
-    <div style="text-align:center; margin-top:15px">
+  <div class="qualityButtons">
 
-      <button id="closeReport">
-        بستن
-      </button>
+    <button data-quality="1">1</button>
+    <button data-quality="2">2</button>
+    <button data-quality="3">3</button>
+    <button data-quality="4">4</button>
+    <button data-quality="5">5</button>
 
-    </div>
+  </div>
 
-  </dialog>
-
-
-  <script>
-
-    /* ==================================================
-       تنظیمات اصلی
-    ================================================== */
-
-    const KEY = 'time_tracker_entries_v1';
-
-    const GOAL_KEY = 'time_tracker_goals_v1';
-
-    const TASK_KEY = 'time_tracker_tasks_v1';
-
-    const ACCESS_CODE = '5562798';
-
-    const ACCESS_KEY = 'time_tracker_unlocked_v1';
+</dialog>
 
 
-    /* ==================================================
-       وضعیت موقت برنامه
-    ================================================== */
+<!-- =========================
+     Report Dialog
+========================= -->
 
-    let activeTask = null;
+<dialog id="reportDialog">
 
-    let pendingTask = null;
+  <h3>
+    گزارش روز
+  </h3>
 
-    let activeBreak = null;
+  <div id="reportText"></div>
 
-    let dialogMode = 'time';
+  <div style="text-align:center">
+
+    <button id="closeReport">
+      بستن
+    </button>
+
+  </div>
+
+</dialog>
 
 
-    /* ==================================================
-       دسترسی سریع به عناصر
-    ================================================== */
+<script>
 
-    const $ = id => document.getElementById(id);
+/* ==================================================
+   Keys
+================================================== */
+
+const KEY = 'time_tracker_entries_v1';
+
+const GOAL_KEY = 'time_tracker_goals_v1';
+
+const TASK_KEY = 'time_tracker_tasks_v1';
+
+const ACCESS_CODE = '5562798';
+
+const ACCESS_KEY = 'time_tracker_unlocked_v1';
 
 
-    /* ==================================================
-       قفل برنامه
-    ================================================== */
+/* ==================================================
+   Temporary State
+================================================== */
 
-    function unlockApp() {
+let activeTask = null;
 
-      if (localStorage.getItem(ACCESS_KEY) === '1') {
+let pendingTask = null;
 
-        $('lockScreen').style.display = 'none';
+let activeBreak = null;
 
-      } else {
+let dialogMode = 'time';
 
-        $('accessCode').focus();
 
-      }
+/* ==================================================
+   Helper
+================================================== */
+
+const $ = id =>
+  document.getElementById(id);
+
+
+/* ==================================================
+   Lock
+================================================== */
+
+function unlockApp() {
+
+  if (
+    localStorage.getItem(ACCESS_KEY) === '1'
+  ) {
+
+    $('lockScreen').style.display = 'none';
+
+  } else {
+
+    $('accessCode').focus();
+
+  }
+
+}
+
+
+$('unlockButton').onclick = () => {
+
+  const code =
+    $('accessCode').value;
+
+  if (code === ACCESS_CODE) {
+
+    localStorage.setItem(
+      ACCESS_KEY,
+      '1'
+    );
+
+    $('lockScreen').style.display =
+      'none';
+
+  } else {
+
+    $('lockError').style.display =
+      'block';
+
+    $('accessCode').value = '';
+
+    $('accessCode').focus();
+
+  }
+
+};
+
+
+$('accessCode').addEventListener(
+  'keydown',
+  e => {
+
+    if (e.key === 'Enter') {
+
+      $('unlockButton').click();
 
     }
 
-
-    $('unlockButton').onclick = () => {
-
-      const code = $('accessCode').value;
-
-      if (code === ACCESS_CODE) {
-
-        localStorage.setItem(ACCESS_KEY, '1');
-
-        $('lockScreen').style.display = 'none';
-
-      } else {
-
-        $('lockError').style.display = 'block';
-
-        $('accessCode').value = '';
-
-        $('accessCode').focus();
-
-      }
-
-    };
+  }
+);
 
 
-    $('accessCode').addEventListener('keydown', e => {
+/* ==================================================
+   Entries
+================================================== */
 
-      if (e.key === 'Enter') {
+function load() {
 
-        $('unlockButton').click();
+  return JSON.parse(
+    localStorage.getItem(KEY) || '[]'
+  );
 
-      }
-
-    });
+}
 
 
-    /* ==================================================
-       ثبت زمان‌های ساده
-    ================================================== */
+function save(a) {
 
-    function load() {
+  localStorage.setItem(
+    KEY,
+    JSON.stringify(a)
+  );
 
-      return JSON.parse(
-        localStorage.getItem(KEY) || '[]'
-      );
+}
 
+
+function saveTopic(topic) {
+
+  const a = load();
+
+  a.push({
+
+    timestamp: Date.now(),
+
+    topic
+
+  });
+
+  save(a);
+
+  $('topicDialog').close();
+
+  render();
+
+  renderGoalSuggestions();
+
+}
+
+
+/* ==================================================
+   Date
+================================================== */
+
+function fmt(ts) {
+
+  return new Date(ts).toLocaleTimeString(
+    'fa-IR',
+    {
+      hour: '2-digit',
+      minute: '2-digit'
     }
+  );
+
+}
 
 
-    function save(a) {
+function fmtDateTime(ts) {
 
-      localStorage.setItem(
-        KEY,
-        JSON.stringify(a)
-      );
-
+  return new Date(ts).toLocaleString(
+    'fa-IR',
+    {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
     }
+  );
+
+}
 
 
-    function saveTopic(topic) {
+function dateKey(ts) {
 
-      const a = load();
+  const d =
+    new Date(ts);
 
-      a.push({
+  const y =
+    d.getFullYear();
 
-        timestamp: Date.now(),
+  const m =
+    String(
+      d.getMonth() + 1
+    ).padStart(2, '0');
 
-        topic: topic
+  const day =
+    String(
+      d.getDate()
+    ).padStart(2, '0');
 
-      });
+  return `${y}-${m}-${day}`;
 
-      save(a);
-
-      $('topicDialog').close();
-
-      render();
-
-      renderGoalSuggestions();
-
-    }
+}
 
 
-    /* ==================================================
-       زمان و تاریخ
-    ================================================== */
+function todayKey() {
 
-    function fmt(ts) {
+  return dateKey(
+    Date.now()
+  );
 
-      return new Date(ts).toLocaleTimeString(
-        'fa-IR',
-        {
-          hour: '2-digit',
-          minute: '2-digit'
+}
+
+
+function entriesForDate(date) {
+
+  return load().filter(
+    x =>
+      dateKey(x.timestamp) === date
+  );
+
+}
+
+
+/* ==================================================
+   Goals
+================================================== */
+
+function loadGoals() {
+
+  return JSON.parse(
+    localStorage.getItem(GOAL_KEY) || '[]'
+  );
+
+}
+
+
+function saveGoals(goals) {
+
+  localStorage.setItem(
+    GOAL_KEY,
+    JSON.stringify(goals)
+  );
+
+}
+
+
+function renderGoals() {
+
+  const goals =
+    loadGoals();
+
+  $('goals').innerHTML =
+    '<h2>اهداف فردا</h2>';
+
+
+  goals.forEach((g, i) => {
+
+    const div =
+      document.createElement('div');
+
+    div.className =
+      'goalItem';
+
+    div.innerHTML = `
+
+      <input
+        type="checkbox"
+        ${g.done ? 'checked' : ''}
+      >
+
+      <div class="goalText">
+
+        <div>
+          ${g.text}
+        </div>
+
+        ${
+          g.startTime &&
+          g.endTime
+            ? `
+              <div class="goalTime">
+                ${g.startTime}
+                تا
+                ${g.endTime}
+              </div>
+            `
+            : ''
         }
-      );
 
-    }
+      </div>
 
+      <button class="deleteGoal">
+        حذف
+      </button>
 
-    function fmtDateTime(ts) {
+    `;
 
-      return new Date(ts).toLocaleString(
-        'fa-IR',
-        {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit'
-        }
-      );
 
-    }
+    const checkbox =
+      div.querySelector('input');
 
 
-    function dateKey(ts) {
+    checkbox.onchange = () => {
 
-      const d = new Date(ts);
-
-      const y = d.getFullYear();
-
-      const m = String(
-        d.getMonth() + 1
-      ).padStart(2, '0');
-
-      const day = String(
-        d.getDate()
-      ).padStart(2, '0');
-
-      return `${y}-${m}-${day}`;
-
-    }
-
-
-    function todayKey() {
-
-      return dateKey(Date.now());
-
-    }
-
-
-    function entriesForDate(date) {
-
-      return load().filter(
-        x => dateKey(x.timestamp) === date
-      );
-
-    }
-
-
-    /* ==================================================
-       اهداف
-    ================================================== */
-
-    function loadGoals() {
-
-      return JSON.parse(
-        localStorage.getItem(GOAL_KEY) || '[]'
-      );
-
-    }
-
-
-    function saveGoals(goals) {
-
-      localStorage.setItem(
-        GOAL_KEY,
-        JSON.stringify(goals)
-      );
-
-    }
-
-
-    function renderGoals() {
-
-      const goals = loadGoals();
-
-      $('goals').innerHTML = `
-        <h2>اهداف فردا</h2>
-      `;
-
-      goals.forEach((g, i) => {
-
-        const div = document.createElement('div');
-
-        div.className = 'goalItem';
-
-        div.innerHTML = `
-
-          <input
-            type="checkbox"
-            ${g.done ? 'checked' : ''}
-          >
-
-          <div class="goalText">
-
-            <div>
-              ${g.text}
-            </div>
-
-            ${
-              g.startTime && g.endTime
-                ? `
-                  <div class="goalTime">
-                    ${g.startTime} تا ${g.endTime}
-                  </div>
-                `
-                : ''
-            }
-
-          </div>
-
-          <button class="deleteGoal">
-            حذف
-          </button>
-        `;
-
-
-        const checkbox =
-          div.querySelector('input');
-
-        checkbox.onchange = () => {
-
-          goals[i].done =
-            checkbox.checked;
-
-          saveGoals(goals);
-
-          renderGoals();
-
-          renderGoalSuggestions();
-
-        };
-
-
-        div.querySelector('.deleteGoal').onclick = () => {
-
-          goals.splice(i, 1);
-
-          saveGoals(goals);
-
-          renderGoals();
-
-          renderGoalSuggestions();
-
-        };
-
-
-        $('goals').appendChild(div);
-
-      });
-
-    }
-
-
-    function addGoal(event) {
-
-      if (event) {
-
-        event.preventDefault();
-
-      }
-
-      const text =
-        $('goalInput').value.trim();
-
-      const start =
-        $('goalStart').value;
-
-      const end =
-        $('goalEnd').value;
-
-
-      if (!text) {
-
-        alert('متن هدف را وارد کن.');
-
-        return;
-
-      }
-
-
-      if (start && end && start >= end) {
-
-        alert(
-          'زمان شروع باید قبل از زمان پایان باشد.'
-        );
-
-        return;
-
-      }
-
-
-      const goals = loadGoals();
-
-      goals.push({
-
-        text: text,
-
-        done: false,
-
-        startTime: start,
-
-        endTime: end
-
-      });
-
+      goals[i].done =
+        checkbox.checked;
 
       saveGoals(goals);
-
-      $('goalInput').value = '';
-
-      $('goalStart').value = '';
-
-      $('goalEnd').value = '';
 
       renderGoals();
 
       renderGoalSuggestions();
 
-    }
+    };
 
 
-    $('addGoal').onclick = addGoal;
+    div.querySelector(
+      '.deleteGoal'
+    ).onclick = () => {
+
+      goals.splice(i, 1);
+
+      saveGoals(goals);
+
+      renderGoals();
+
+      renderGoalSuggestions();
+
+    };
 
 
-    $('goalInput').addEventListener(
-      'keydown',
-      e => {
+    $('goals').appendChild(div);
 
-        if (e.key === 'Enter') {
+  });
 
-          addGoal(e);
+}
 
-        }
 
-      }
+function addGoal(event) {
+
+  if (event) {
+    event.preventDefault();
+  }
+
+  const text =
+    $('goalInput').value.trim();
+
+  const start =
+    $('goalStart').value;
+
+  const end =
+    $('goalEnd').value;
+
+
+  if (!text) {
+
+    alert(
+      'متن هدف را وارد کن.'
     );
 
+    return;
 
-    /* ==================================================
-       کارها
-    ================================================== */
+  }
 
-    function loadTasks() {
 
-      return JSON.parse(
-        localStorage.getItem(TASK_KEY) || '[]'
-      );
+  if (
+    start &&
+    end &&
+    start >= end
+  ) {
 
-    }
-
-
-    function saveTasks(tasks) {
-
-      localStorage.setItem(
-        TASK_KEY,
-        JSON.stringify(tasks)
-      );
-
-    }
-
-
-    function startTask(topicOverride) {
-
-      const topic =
-        topicOverride ||
-        $('topic').value.trim();
-
-
-      if (!topic) {
-
-        alert('موضوع کار را وارد کن.');
-
-        return;
-
-      }
-
-
-      activeTask = {
-
-        topic: topic,
-
-        start: Date.now(),
-
-        breaks: []
-
-      };
-
-
-      activeBreak = null;
-
-
-      $('topicDialog').close();
-
-      $('taskTap').textContent =
-        'پایان کار';
-
-      $('restControls').style.display =
-        'block';
-
-      $('restTap').textContent =
-        'شروع استراحت';
-
-    }
-
-
-    function finishTask() {
-
-      if (!activeTask) {
-
-        return;
-
-      }
-
-
-      if (activeBreak) {
-
-        alert(
-          'اول استراحت را پایان بده.'
-        );
-
-        return;
-
-      }
-
-
-      pendingTask = {
-
-        topic: activeTask.topic,
-
-        start: activeTask.start,
-
-        end: Date.now(),
-
-        breaks: activeTask.breaks,
-
-        quality: null
-
-      };
-
-
-      activeTask = null;
-
-      activeBreak = null;
-
-
-      $('taskTap').textContent =
-        'ثبت کار';
-
-      $('restControls').style.display =
-        'none';
-
-
-      $('qualityDialog').showModal();
-
-    }
-
-
-    /* ==================================================
-       استراحت
-    ================================================== */
-
-    $('restTap').onclick = () => {
-
-      if (!activeTask) {
-
-        return;
-
-      }
-
-
-      if (!activeBreak) {
-
-        activeBreak = {
-
-          start: Date.now()
-
-        };
-
-        $('restTap').textContent =
-          'پایان استراحت';
-
-      } else {
-
-        activeTask.breaks.push({
-
-          start: activeBreak.start,
-
-          end: Date.now()
-
-        });
-
-        activeBreak = null;
-
-        $('restTap').textContent =
-          'شروع استراحت';
-
-      }
-
-    };
-
-
-    /* ==================================================
-       کیفیت کار
-    ================================================== */
-
-    document
-      .querySelectorAll(
-        '#qualityDialog [data-quality]'
-      )
-      .forEach(button => {
-
-        button.onclick = () => {
-
-          if (!pendingTask) {
-
-            return;
-
-          }
-
-
-          pendingTask.quality =
-            Number(
-              button.dataset.quality
-            );
-
-
-          const tasks = loadTasks();
-
-          tasks.push(pendingTask);
-
-          saveTasks(tasks);
-
-
-          pendingTask = null;
-
-
-          $('qualityDialog').close();
-
-          renderTasks();
-
-        };
-
-      });
-
-
-    /* ==================================================
-       محاسبه استراحت
-    ================================================== */
-
-    function totalBreakMs(task) {
-
-      return (task.breaks || []).reduce(
-        (sum, b) => {
-
-          if (
-            b.start &&
-            b.end
-          ) {
-
-            return sum +
-              (b.end - b.start);
-
-          }
-
-          return sum;
-
-        },
-        0
-      );
-
-    }
-
-
-    function formatDuration(ms) {
-
-      const minutes =
-        Math.round(ms / 60000);
-
-
-      if (minutes < 60) {
-
-        return `${minutes} دقیقه`;
-
-      }
-
-
-      const hours =
-        Math.floor(minutes / 60);
-
-      const rest =
-        minutes % 60;
-
-
-      if (rest === 0) {
-
-        return `${hours} ساعت`;
-
-      }
-
-
-      return `${hours} ساعت و ${rest} دقیقه`;
-
-    }
-
-
-    /* ==================================================
-       پیشنهاد اهداف
-    ================================================== */
-
-    function renderGoalSuggestions(
-      mode = dialogMode
-    ) {
-
-      const container =
-        $('goalSuggestions');
-
-      container.innerHTML = '';
-
-
-      const goals =
-        loadGoals()
-          .filter(g => !g.done)
-          .slice(0, 3);
-
-
-      goals.forEach(g => {
-
-        const div =
-          document.createElement('div');
-
-        div.className =
-          'suggestion';
-
-        div.textContent =
-          g.text;
-
-
-        div.onclick = () => {
-
-          if (mode === 'task') {
-
-            startTask(g.text);
-
-          } else {
-
-            saveTopic(g.text);
-
-          }
-
-
-          const allGoals =
-            loadGoals();
-
-          const index =
-            allGoals.findIndex(
-              x =>
-                x.text === g.text &&
-                !x.done
-            );
-
-
-          if (index !== -1) {
-
-            allGoals[index].done =
-              true;
-
-            saveGoals(allGoals);
-
-            renderGoals();
-
-          }
-
-        };
-
-
-        container.appendChild(div);
-
-      });
-
-    }
-
-
-    /* ==================================================
-       ثبت زمان
-    ================================================== */
-
-    $('tap').onclick = () => {
-
-      dialogMode = 'time';
-
-      $('topic').value = '';
-
-      $('topicDialogTitle').textContent =
-        'ثبت زمان';
-
-      renderGoalSuggestions('time');
-
-
-      $('save').onclick = () => {
-
-        const topic =
-          $('topic').value.trim();
-
-
-        if (!topic) {
-
-          alert('موضوع را وارد کن.');
-
-          return;
-
-        }
-
-
-        saveTopic(topic);
-
-      };
-
-
-      $('topicDialog').showModal();
-
-    };
-
-
-    /* ==================================================
-       ثبت کار
-    ================================================== */
-
-    $('taskTap').onclick = () => {
-
-      if (activeTask) {
-
-        finishTask();
-
-        return;
-
-      }
-
-
-      dialogMode = 'task';
-
-      $('topic').value = '';
-
-      $('topicDialogTitle').textContent =
-        'شروع کار';
-
-      renderGoalSuggestions('task');
-
-
-      $('save').onclick = () => {
-
-        startTask();
-
-      };
-
-
-      $('topicDialog').showModal();
-
-    };
-
-
-    /* ==================================================
-       لغو دیالوگ
-    ================================================== */
-
-    $('cancel').onclick = () => {
-
-      $('topicDialog').close();
-
-    };
-
-
-    /* ==================================================
-       نمایش کارهای یک روز
-    ================================================== */
-
-    function tasksForDate(date) {
-
-      return loadTasks().filter(
-        x => dateKey(x.start) === date
-      );
-
-    }
-
-
-    /* ==================================================
-       حذف یک مورد از گزارش
-    ================================================== */
-
-    function deleteReportItem(
-      type,
-      id
-    ) {
-
-      const confirmed =
-        confirm(
-          'این مورد حذف شود؟'
-        );
-
-
-      if (!confirmed) {
-
-        return;
-
-      }
-
-
-      /* -------------------------
-         حذف ثبت زمان
-      ------------------------- */
-
-      if (type === 'time') {
-
-        let entries = load();
-
-        entries =
-          entries.filter(
-            x =>
-              x.timestamp !== id
-          );
-
-        save(entries);
-
-      }
-
-
-      /* -------------------------
-         حذف کار
-      ------------------------- */
-
-      if (type === 'task') {
-
-        let tasks = loadTasks();
-
-        tasks =
-          tasks.filter(
-            x =>
-              x.start !== id
-          );
-
-        saveTasks(tasks);
-
-      }
-
-
-      /* دوباره نمایش گزارش */
-
-      showReport();
-
-
-      /* به‌روزرسانی صفحه اصلی */
-
-      render();
-
-    }
-
-
-    /* ==================================================
-       ساخت گزارش
-    ================================================== */
-
-    function showReport() {
-
-      const date =
-        $('reportDate').value;
-
-
-      const entries =
-        entriesForDate(date);
-
-
-      const tasks =
-        tasksForDate(date);
-
-
-      let html = '';
-
-
-      /* -------------------------
-         اگر چیزی وجود نداشت
-      ------------------------- */
-
-      if (
-        entries.length === 0 &&
-        tasks.length === 0
-      ) {
-
-        html = `
-          <p>
-            برای این روز چیزی ثبت نشده.
-          </p>
-        `;
-
-      }
-
-
-      /* -------------------------
-         ثبت زمان‌ها
-      ------------------------- */
-
-      entries.forEach(e => {
-
-        html += `
-
-          <div class="reportItem">
-
-            <div class="reportItemContent">
-
-              <div>
-                <strong>
-                  ثبت زمان
-                </strong>
-              </div>
-
-              <div>
-                ${fmtDateTime(e.timestamp)}
-              </div>
-
-              <div>
-                ${e.topic}
-              </div>
-
-            </div>
-
-            <button
-              class="deleteReportBtn"
-              onclick="
-                deleteReportItem(
-                  'time',
-                  ${e.timestamp}
-                )
-              "
-            >
-              حذف
-            </button>
-
-          </div>
-
-        `;
-
-      });
-
-
-      /* -------------------------
-         کارها
-      ------------------------- */
-
-      tasks.forEach(t => {
-
-        const breakMs =
-          totalBreakMs(t);
-
-
-        let breaksHtml = '';
-
-
-        if (
-          t.breaks &&
-          t.breaks.length > 0
-        ) {
-
-          breaksHtml =
-            t.breaks
-              .map(b => `
-
-                <div>
-                  استراحت:
-                  ${fmt(b.start)}
-                  تا
-                  ${fmt(b.end)}
-                </div>
-
-              `)
-              .join('');
-
-        }
-
-
-        html += `
-
-          <div class="reportItem">
-
-            <div class="reportItemContent">
-
-              <div>
-                <strong>
-                  کار
-                </strong>
-              </div>
-
-              <div>
-                ${fmtDateTime(t.start)}
-                تا
-                ${fmtDateTime(t.end)}
-              </div>
-
-              <div>
-                ${t.topic}
-              </div>
-
-              <div>
-                کیفیت:
-                ${t.quality}/5
-              </div>
-
-              <div>
-                مجموع استراحت:
-                ${formatDuration(breakMs)}
-              </div>
-
-              ${breaksHtml}
-
-            </div>
-
-            <button
-              class="deleteReportBtn"
-              onclick="
-                deleteReportItem(
-                  'task',
-                  ${t.start}
-                )
-              "
-            >
-              حذف
-            </button>
-
-          </div>
-
-        `;
-
-      });
-
-
-      $('reportText').innerHTML =
-        html;
-
-
-      if (
-        !$('reportDialog').open
-      ) {
-
-        $('reportDialog').showModal();
-
-      }
-
-    }
-
-
-    /* ==================================================
-       دکمه گزارش
-    ================================================== */
-
-    $('report').onclick = () => {
-
-      showReport();
-
-    };
-
-
-    /* ==================================================
-       بستن گزارش
-    ================================================== */
-
-    $('closeReport').onclick = () => {
-
-      $('reportDialog').close();
-
-    };
-
-
-    /* ==================================================
-       رندر لیست امروز
-    ================================================== */
-
-    function render() {
-
-      const entries =
-        entriesForDate(
-          todayKey()
-        );
-
-
-      const tasks =
-        tasksForDate(
-          todayKey()
-        );
-
-
-      const container =
-        $('drawerEntries');
-
-
-      container.innerHTML = '';
-
-
-      if (
-        entries.length === 0 &&
-        tasks.length === 0
-      ) {
-
-        container.innerHTML =
-          '<p>امروز چیزی ثبت نشده.</p>';
-
-        return;
-
-      }
-
-
-      /* ثبت زمان‌ها */
-
-      entries.forEach(e => {
-
-        const div =
-          document.createElement('div');
-
-        div.className =
-          'entry';
-
-
-        div.innerHTML = `
-
-          <strong>
-            ${fmt(e.timestamp)}
-          </strong>
-
-          <br>
-
-          ${e.topic}
-
-        `;
-
-
-        container.appendChild(div);
-
-      });
-
-
-      /* کارها */
-
-      tasks.forEach(t => {
-
-        const div =
-          document.createElement('div');
-
-        div.className =
-          'entry';
-
-
-        const breakMs =
-          totalBreakMs(t);
-
-
-        div.innerHTML = `
-
-          <strong>
-            ${fmt(t.start)}
-            تا
-            ${fmt(t.end)}
-          </strong>
-
-          <br>
-
-          ${t.topic}
-
-          <br>
-
-          کیفیت:
-          ${t.quality}/5
-
-          <br>
-
-          استراحت:
-          ${formatDuration(breakMs)}
-
-        `;
-
-
-        container.appendChild(div);
-
-      });
-
-    }
-
-
-    function renderTasks() {
-
-      render();
-
-    }
-
-
-    /* ==================================================
-       منو
-    ================================================== */
-
-    $('menuButton').onclick = () => {
-
-      const drawer =
-        $('drawer');
-
-      const backdrop =
-        $('backdrop');
-
-
-      const isOpen =
-        drawer.classList.contains(
-          'open'
-        );
-
-
-      if (isOpen) {
-
-        drawer.classList.remove(
-          'open'
-        );
-
-        backdrop.classList.remove(
-          'show'
-        );
-
-        $('menuButton')
-          .setAttribute(
-            'aria-expanded',
-            'false'
-          );
-
-      } else {
-
-        drawer.classList.add(
-          'open'
-        );
-
-        backdrop.classList.add(
-          'show'
-        );
-
-        $('menuButton')
-          .setAttribute(
-            'aria-expanded',
-            'true'
-          );
-
-      }
-
-    };
-
-
-    $('backdrop').onclick = () => {
-
-      $('drawer').classList.remove(
-        'open'
-      );
-
-      $('backdrop').classList.remove(
-        'show'
-      );
-
-      $('menuButton')
-        .setAttribute(
-          'aria-expanded',
-          'false'
-        );
-
-    };
-
-
-    /* ==================================================
-       ساعت
-    ================================================== */
-
-    function clock() {
-
-      $('clock').textContent =
-        new Date().toLocaleTimeString(
-          'fa-IR',
-          {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-          }
-        );
-
-    }
-
-
-    /* ==================================================
-       شروع برنامه
-    ================================================== */
-
-    unlockApp();
-
-    clock();
-
-    setInterval(
-      clock,
-      1000
+    alert(
+      'زمان شروع باید قبل از زمان پایان باشد.'
     );
 
+    return;
 
-    $('reportDate').value =
-      todayKey();
+  }
 
 
-    render();
+  const goals =
+    loadGoals();
 
-    renderGoals();
+
+  goals.push({
+
+    text,
+
+    done: false,
+
+    startTime: start,
+
+    endTime: end
+
+  });
+
+
+  saveGoals(goals);
+
+  $('goalInput').value = '';
+
+  $('goalStart').value = '';
+
+  $('goalEnd').value = '';
+
+  renderGoals();
+
+  renderGoalSuggestions();
+
+}
+
+
+$('addGoal').onclick =
+  addGoal;
+
+
+$('goalInput').addEventListener(
+  'keydown',
+  e => {
+
+    if (e.key === 'Enter') {
+
+      addGoal(e);
+
+    }
+
+  }
+);
+
+
+/* ==================================================
+   Tasks
+================================================== */
+
+function loadTasks() {
+
+  return JSON.parse(
+    localStorage.getItem(
+      TASK_KEY
+    ) || '[]'
+  );
+
+}
+
+
+function saveTasks(tasks) {
+
+  localStorage.setItem(
+    TASK_KEY,
+    JSON.stringify(tasks)
+  );
+
+}
+
+
+function startTask(topicOverride) {
+
+  const topic =
+    topicOverride ||
+    $('topic').value.trim();
+
+
+  if (!topic) {
+
+    alert(
+      'موضوع کار را وارد کن.'
+    );
+
+    return;
+
+  }
+
+
+  activeTask = {
+
+    topic,
+
+    start: Date.now(),
+
+    breaks: []
+
+  };
+
+
+  activeBreak = null;
+
+  $('topicDialog').close();
+
+  $('taskTap').textContent =
+    'پایان کار';
+
+  $('restControls').style.display =
+    'block';
+
+  $('restTap').textContent =
+    'شروع استراحت';
+
+}
+
+
+function finishTask() {
+
+  if (!activeTask) {
+    return;
+  }
+
+
+  if (activeBreak) {
+
+    alert(
+      'اول استراحت را پایان بده.'
+    );
+
+    return;
+
+  }
+
+
+  pendingTask = {
+
+    topic: activeTask.topic,
+
+    start: activeTask.start,
+
+    end: Date.now(),
+
+    breaks: activeTask.breaks,
+
+    quality: null
+
+  };
+
+
+  activeTask = null;
+
+  activeBreak = null;
+
+  $('taskTap').textContent =
+    'ثبت کار';
+
+  $('restControls').style.display =
+    'none';
+
+  $('qualityDialog').showModal();
+
+}
+
+
+/* ==================================================
+   Break
+================================================== */
+
+$('restTap').onclick = () => {
+
+  if (!activeTask) {
+    return;
+  }
+
+
+  if (!activeBreak) {
+
+    activeBreak = {
+      start: Date.now()
+    };
+
+    $('restTap').textContent =
+      'پایان استراحت';
+
+  } else {
+
+    activeTask.breaks.push({
+
+      start: activeBreak.start,
+
+      end: Date.now()
+
+    });
+
+    activeBreak = null;
+
+    $('restTap').textContent =
+      'شروع استراحت';
+
+  }
+
+};
+
+
+/* ==================================================
+   Quality
+================================================== */
+
+document
+.querySelectorAll(
+  '#qualityDialog [data-quality]'
+)
+.forEach(button => {
+
+  button.onclick = () => {
+
+    if (!pendingTask) {
+      return;
+    }
+
+
+    pendingTask.quality =
+      Number(
+        button.dataset.quality
+      );
+
+
+    const tasks =
+      loadTasks();
+
+    tasks.push(
+      pendingTask
+    );
+
+    saveTasks(tasks);
+
+    pendingTask = null;
+
+    $('qualityDialog').close();
 
     renderTasks();
 
+  };
 
-    setInterval(
-      render,
-      60000
+});
+
+
+/* ==================================================
+   Break Calculation
+================================================== */
+
+function totalBreakMs(task) {
+
+  return (task.breaks || [])
+    .reduce(
+      (sum, b) => {
+
+        if (
+          b.start &&
+          b.end
+        ) {
+
+          return sum +
+            (b.end - b.start);
+
+        }
+
+        return sum;
+
+      },
+      0
     );
 
-  </script>
+}
+
+
+function formatDuration(ms) {
+
+  const minutes =
+    Math.round(
+      ms / 60000
+    );
+
+
+  if (minutes < 60) {
+
+    return `${minutes} دقیقه`;
+
+  }
+
+
+  const hours =
+    Math.floor(
+      minutes / 60
+    );
+
+  const rest =
+    minutes % 60;
+
+
+  if (rest === 0) {
+
+    return `${hours} ساعت`;
+
+  }
+
+
+  return `${hours} ساعت و ${rest} دقیقه`;
+
+}
+
+
+/* ==================================================
+   Goal Suggestions
+================================================== */
+
+function renderGoalSuggestions(
+  mode = dialogMode
+) {
+
+  const container =
+    $('goalSuggestions');
+
+  container.innerHTML = '';
+
+
+  const goals =
+    loadGoals()
+      .filter(g => !g.done)
+      .slice(0, 3);
+
+
+  goals.forEach(g => {
+
+    const div =
+      document.createElement('div');
+
+    div.className =
+      'suggestion';
+
+    div.textContent =
+      g.text;
+
+
+    div.onclick = () => {
+
+      if (mode === 'task') {
+
+        startTask(g.text);
+
+      } else {
+
+        saveTopic(g.text);
+
+      }
+
+
+      const allGoals =
+        loadGoals();
+
+
+      const index =
+        allGoals.findIndex(
+          x =>
+            x.text === g.text &&
+            !x.done
+        );
+
+
+      if (index !== -1) {
+
+        allGoals[index].done =
+          true;
+
+        saveGoals(allGoals);
+
+        renderGoals();
+
+      }
+
+    };
+
+
+    container.appendChild(div);
+
+  });
+
+}
+
+
+/* ==================================================
+   Time Button
+================================================== */
+
+$('tap').onclick = () => {
+
+  dialogMode = 'time';
+
+  $('topic').value = '';
+
+  $('topicDialogTitle').textContent =
+    'ثبت زمان';
+
+  renderGoalSuggestions(
+    'time'
+  );
+
+
+  $('save').onclick = () => {
+
+    const topic =
+      $('topic').value.trim();
+
+
+    if (!topic) {
+
+      alert(
+        'موضوع را وارد کن.'
+      );
+
+      return;
+
+    }
+
+
+    saveTopic(topic);
+
+  };
+
+
+  $('topicDialog').showModal();
+
+};
+
+
+/* ==================================================
+   Task Button
+================================================== */
+
+$('taskTap').onclick = () => {
+
+  if (activeTask) {
+
+    finishTask();
+
+    return;
+
+  }
+
+
+  dialogMode = 'task';
+
+  $('topic').value = '';
+
+  $('topicDialogTitle').textContent =
+    'شروع کار';
+
+  renderGoalSuggestions(
+    'task'
+  );
+
+
+  $('save').onclick = () => {
+
+    startTask();
+
+  };
+
+
+  $('topicDialog').showModal();
+
+};
+
+
+/* ==================================================
+   Cancel
+================================================== */
+
+$('cancel').onclick = () => {
+
+  $('topicDialog').close();
+
+};
+
+
+/* ==================================================
+   Tasks For Date
+================================================== */
+
+function tasksForDate(date) {
+
+  return loadTasks().filter(
+    x =>
+      dateKey(x.start) === date
+  );
+
+}
+
+
+/* ==================================================
+   NEW:
+   Delete One Report Item
+================================================== */
+
+function deleteReportItem(
+  type,
+  id
+) {
+
+  if (
+    !confirm(
+      'این مورد حذف شود؟'
+    )
+  ) {
+    return;
+  }
+
+
+  /* ثبت زمان */
+
+  if (type === 'time') {
+
+    const entries =
+      load().filter(
+        x =>
+          x.timestamp !== id
+      );
+
+    save(entries);
+
+  }
+
+
+  /* ثبت کار */
+
+  if (type === 'task') {
+
+    const tasks =
+      loadTasks().filter(
+        x =>
+          x.start !== id
+      );
+
+    saveTasks(tasks);
+
+  }
+
+
+  /* گزارش را دوباره بساز */
+
+  showReport();
+
+  /* لیست امروز هم به‌روز شود */
+
+  render();
+
+}
+
+
+/* ==================================================
+   Report
+================================================== */
+
+function showReport() {
+
+  const date =
+    $('reportDate').value;
+
+
+  const entries =
+    entriesForDate(date);
+
+  const tasks =
+    tasksForDate(date);
+
+
+  let html = '';
+
+
+  if (
+    entries.length === 0 &&
+    tasks.length === 0
+  ) {
+
+    html =
+      '<p>برای این روز چیزی ثبت نشده.</p>';
+
+  }
+
+
+  /* -------------------------
+     Time Entries
+  ------------------------- */
+
+  entries.forEach(e => {
+
+    html += `
+
+      <div class="reportItem">
+
+        <div>
+
+          ${fmtDateTime(e.timestamp)}
+          — ${e.topic}
+
+        </div>
+
+        <button
+          class="reportDelete"
+          onclick="
+            deleteReportItem(
+              'time',
+              ${e.timestamp}
+            )
+          "
+        >
+          حذف
+        </button>
+
+      </div>
+
+    `;
+
+  });
+
+
+  /* -------------------------
+     Tasks
+  ------------------------- */
+
+  tasks.forEach(t => {
+
+    const breakMs =
+      totalBreakMs(t);
+
+
+    let breaksHtml = '';
+
+
+    if (
+      t.breaks &&
+      t.breaks.length
+    ) {
+
+      breaksHtml =
+        t.breaks
+          .map(
+            b => `
+              <div>
+                استراحت:
+                ${fmt(b.start)}
+                تا
+                ${fmt(b.end)}
+              </div>
+            `
+          )
+          .join('');
+
+    }
+
+
+    html += `
+
+      <div class="reportItem">
+
+        <div>
+
+          <div>
+            ${fmtDateTime(t.start)}
+            تا
+            ${fmtDateTime(t.end)}
+          </div>
+
+          <div>
+            ${t.topic}
+          </div>
+
+          <div>
+            کیفیت:
+            ${t.quality}/5
+          </div>
+
+          <div>
+            مجموع استراحت:
+            ${formatDuration(breakMs)}
+          </div>
+
+          ${breaksHtml}
+
+        </div>
+
+        <button
+          class="reportDelete"
+          onclick="
+            deleteReportItem(
+              'task',
+              ${t.start}
+            )
+          "
+        >
+          حذف
+        </button>
+
+      </div>
+
+    `;
+
+  });
+
+
+  $('reportText').innerHTML =
+    html;
+
+
+  if (
+    !$('reportDialog').open
+  ) {
+
+    $('reportDialog').showModal();
+
+  }
+
+}
+
+
+$('report').onclick = () => {
+
+  showReport();
+
+};
+
+
+/* ==================================================
+   Close Report
+================================================== */
+
+$('closeReport').onclick = () => {
+
+  $('reportDialog').close();
+
+};
+
+
+/* ==================================================
+   Render
+================================================== */
+
+function render() {
+
+  const entries =
+    entriesForDate(
+      todayKey()
+    );
+
+
+  const tasks =
+    tasksForDate(
+      todayKey()
+    );
+
+
+  const container =
+    $('drawerEntries');
+
+
+  container.innerHTML = '';
+
+
+  if (
+    entries.length === 0 &&
+    tasks.length === 0
+  ) {
+
+    container.innerHTML =
+      '<p>امروز چیزی ثبت نشده.</p>';
+
+    return;
+
+  }
+
+
+  entries.forEach(e => {
+
+    const div =
+      document.createElement('div');
+
+    div.className =
+      'entry';
+
+
+    div.innerHTML = `
+
+      <strong>
+        ${fmt(e.timestamp)}
+      </strong>
+
+      <br>
+
+      ${e.topic}
+
+    `;
+
+
+    container.appendChild(div);
+
+  });
+
+
+  tasks.forEach(t => {
+
+    const div =
+      document.createElement('div');
+
+    div.className =
+      'entry';
+
+
+    const breakMs =
+      totalBreakMs(t);
+
+
+    div.innerHTML = `
+
+      <strong>
+        ${fmt(t.start)}
+        تا
+        ${fmt(t.end)}
+      </strong>
+
+      <br>
+
+      ${t.topic}
+
+      <br>
+
+      کیفیت:
+      ${t.quality}/5
+
+      <br>
+
+      استراحت:
+      ${formatDuration(breakMs)}
+
+    `;
+
+
+    container.appendChild(div);
+
+  });
+
+}
+
+
+function renderTasks() {
+
+  render();
+
+}
+
+
+/* ==================================================
+   Menu
+================================================== */
+
+$('menuButton').onclick = () => {
+
+  const drawer =
+    $('drawer');
+
+  const backdrop =
+    $('backdrop');
+
+
+  const isOpen =
+    drawer.classList.contains(
+      'open'
+    );
+
+
+  if (isOpen) {
+
+    drawer.classList.remove(
+      'open'
+    );
+
+    backdrop.classList.remove(
+      'show'
+    );
+
+    $('menuButton')
+      .setAttribute(
+        'aria-expanded',
+        'false'
+      );
+
+  } else {
+
+    drawer.classList.add(
+      'open'
+    );
+
+    backdrop.classList.add(
+      'show'
+    );
+
+    $('menuButton')
+      .setAttribute(
+        'aria-expanded',
+        'true'
+      );
+
+  }
+
+};
+
+
+$('backdrop').onclick = () => {
+
+  $('drawer').classList.remove(
+    'open'
+  );
+
+  $('backdrop').classList.remove(
+    'show'
+  );
+
+  $('menuButton')
+    .setAttribute(
+      'aria-expanded',
+      'false'
+    );
+
+};
+
+
+/* ==================================================
+   Clock
+================================================== */
+
+function clock() {
+
+  $('clock').textContent =
+    new Date().toLocaleTimeString(
+      'fa-IR',
+      {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      }
+    );
+
+}
+
+
+/* ==================================================
+   Start
+================================================== */
+
+unlockApp();
+
+clock();
+
+setInterval(
+  clock,
+  1000
+);
+
+$('reportDate').value =
+  todayKey();
+
+render();
+
+renderGoals();
+
+renderTasks();
+
+setInterval(
+  render,
+  60000
+);
+
+</script>
 
 </body>
 </html>
