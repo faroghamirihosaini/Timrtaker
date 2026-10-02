@@ -1,221 +1,37 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Time Tracker</title>
-
 <style>
-:root{
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  color-scheme:light dark
-}
-
-body{
-  margin:0;
-  background:#f4f4f7;
-  color:#17171a
-}
-
-.app{
-  max-width:560px;
-  margin:auto;
-  min-height:100vh;
-  padding:24px 18px;
-  box-sizing:border-box
-}
-
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:26px
-}
-
-h1{
-  font-size:25px;
-  margin:0
-}
-
-.clock{
-  font-variant-numeric:tabular-nums;
-  font-size:18px;
-  color:#666
-}
-
-.card{
-  background:#fff;
-  border:1px solid #ddd;
-  border-radius:24px;
-  padding:22px;
-  margin-bottom:16px
-}
-
-.center{
-  text-align:center
-}
-
-.actions{
-  display:flex;
-  gap:14px;
-  justify-content:center;
-  align-items:center
-}
-
-.tap{
-  width:190px;
-  height:190px;
-  flex:0 0 190px;
-  border-radius:50%;
-  border:0;
-  background:#111;
-  color:#fff;
-  font-size:22px;
-  font-weight:700;
-  cursor:pointer;
-  box-shadow:0 8px 24px #0002
-}
-
-.tap:active{
-  transform:scale(.97)
-}
-
-.sub{
-  color:#777;
-  font-size:14px;
-  margin-top:14px
-}
-
-.row{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  padding:13px 0;
-  border-bottom:1px solid #eee
-}
-
-.row:last-child{
-  border-bottom:0
-}
-
-.time{
-  font-variant-numeric:tabular-nums;
-  font-weight:700
-}
-
-.topic{
-  color:#555
-}
-
-.btn{
-  flex:1;
-  padding:13px;
-  border-radius:14px;
-  border:1px solid #ccc;
-  background:#fff;
-  font-weight:600;
-  cursor:pointer
-}
-
-.danger{
-  color:#b00020
-}
-
-.empty{
-  color:#777;
-  text-align:center;
-  padding:15px
-}
-
-.report{
-  width:100%;
-  padding:14px;
-  border-radius:15px;
-  border:0;
-  background:#111;
-  color:#fff;
-  font-weight:700;
-  cursor:pointer
-}
-
-dialog{
-  border:0;
-  border-radius:22px;
-  padding:22px;
-  max-width:calc(100% - 44px);
-  width:360px
-}
-
-dialog::backdrop{
-  background:#0007
-}
-
-input{
-  width:100%;
-  box-sizing:border-box;
-  padding:14px;
-  border-radius:12px;
-  border:1px solid #ccc;
-  font-size:16px;
-  margin:12px 0
-}
-
-.dialog-actions{
-  display:flex;
-  gap:10px
-}
-
-.dialog-actions button{
-  flex:1;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid #ccc
-}
-
-.primary{
-  background:#111!important;
-  color:#fff;
-  border-color:#111!important
-}
-
-@media(prefers-color-scheme:dark){
-  body{
-    background:#111;
-    color:#eee
-  }
-
-  .card{
-    background:#1c1c1e;
-    border-color:#333
-  }
-
-  .btn,
-  input{
-    background:#242426;
-    color:#eee;
-    border-color:#444
-  }
-
-  .topic,
-  .sub,
-  .clock{
-    color:#aaa
-  }
-
-  .row{
-    border-color:#333
-  }
-
-  dialog{
-    background:#1c1c1e;
-    color:#eee
-  }
-}
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:light dark}body{margin:0;background:#f4f4f7;color:#17171a}.app{max-width:900px;margin:auto;min-height:100vh;padding:24px 18px;box-sizing:border-box}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}h1{font-size:25px;margin:0}.clock{font-variant-numeric:tabular-nums;font-size:18px;color:#666}.main-layout{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:18px;align-items:start}.card{background:#fff;border:1px solid #ddd;border-radius:24px;padding:22px;margin-bottom:16px}.center{text-align:center}.actions{display:flex;gap:14px;justify-content:center;align-items:center}.tap{width:190px;height:190px;flex:0 0 190px;border-radius:50%;border:0;background:#111;color:#fff;font-size:22px;font-weight:700;cursor:pointer;box-shadow:0 8px 24px #0002}.tap:active{transform:scale(.97)}.sub{color:#777;font-size:14px;margin-top:14px}.row{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid #eee}.row:last-child{border-bottom:0}.time{font-variant-numeric:tabular-nums;font-weight:700}.topic{color:#555}.btn{flex:1;padding:13px;border-radius:14px;border:1px solid #ccc;background:#fff;font-weight:600;cursor:pointer}.danger{color:#b00020}.empty{color:#777;text-align:center;padding:15px}.report{width:100%;padding:14px;border-radius:15px;border:0;background:#111;color:#fff;font-weight:700;cursor:pointer}.goals-column{padding:8px 0}.goals-column h2{margin:4px 0 14px;font-size:21px}.goals-column .btn{width:auto}.goals-column .goal-item{padding:10px 0;border-bottom:1px solid #ddd}.goals-column .goal-item:last-child{border-bottom:0}.goals-column .goal-title-line{display:flex;align-items:center;gap:8px}.goals-column .goal-title-line .btn{flex:0 0 auto;padding:5px 8px}.goals-column .goal-time-line{margin:5px 0 0 27px;font-size:13px;color:#777}.menu-button{position:fixed;top:14px;right:14px;z-index:20;width:46px;height:46px;border:0;border-radius:14px;background:#111;color:#fff;font-size:24px;cursor:pointer;box-shadow:0 6px 18px #0003}.drawer{position:fixed;top:0;right:0;z-index:19;width:min(330px,86vw);height:100vh;box-sizing:border-box;padding:78px 18px 24px;background:#fff;box-shadow:-8px 0 30px #0003;transform:translateX(105%);transition:transform .2s ease;overflow:auto}.drawer.open{transform:translateX(0)}.drawer-backdrop{position:fixed;inset:0;z-index:18;background:#0006;display:none}.drawer-backdrop.show{display:block}.drawer h2{margin-top:0}.drawer-section{padding:16px 0;border-bottom:1px solid #eee}.drawer-section:last-child{border-bottom:0}.drawer .report{margin-top:8px}dialog{border:0;border-radius:22px;padding:22px;max-width:calc(100% - 44px);width:360px}dialog::backdrop{background:#0007}input{width:100%;box-sizing:border-box;padding:14px;border-radius:12px;border:1px solid #ccc;font-size:16px;margin:12px 0}.dialog-actions{display:flex;gap:10px}.dialog-actions button{flex:1;padding:12px;border-radius:12px;border:1px solid #ccc}.primary{background:#111!important;color:#fff;border-color:#111!important}.lock-screen{position:fixed;inset:0;z-index:999;background:#f4f4f7;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box}.lock-card{width:min(360px,100%);background:#fff;border:1px solid #ddd;border-radius:24px;padding:26px;box-sizing:border-box;text-align:center}.lock-error{display:none;color:#b00020;font-size:14px;margin-top:10px}@media(max-width:760px){.main-layout{grid-template-columns:1fr}.goals-column{padding:0 4px 16px}}@media(prefers-color-scheme:dark){body{background:#111;color:#eee}.card,.drawer,.lock-card{background:#1c1c1e;border-color:#333}.btn,input{background:#242426;color:#eee;border-color:#444}.topic,.sub,.clock{color:#aaa}.row,.drawer-section{border-color:#333}.lock-screen{background:#111}dialog{background:#1c1c1e;color:#eee}}
 </style>
 </head>
 
 <body>
+
+<div class="lock-screen" id="lockScreen">
+  <div class="lock-card">
+    <h2>ورود به ثبت زمان</h2>
+    <div class="sub">برای ورود رمز را وارد کن.</div>
+
+    <input
+      id="accessCode"
+      type="password"
+      inputmode="numeric"
+      autocomplete="off"
+      placeholder="رمز ورود"
+    >
+
+    <button class="primary btn" id="unlockButton" type="button">
+      ورود
+    </button>
+
+    <div class="lock-error" id="lockError">
+      رمز واردشده درست نیست.
+    </div>
+  </div>
+</div>
 
 <main class="app" id="app">
 
@@ -224,130 +40,151 @@ input{
   <div class="clock" id="clock">--:--:--</div>
 </header>
 
+<div class="main-layout">
 
-<!--
-  این بخش دو نوع ثبت اصلی برنامه را در اختیار کاربر می‌گذارد:
+  <section class="card center">
 
-  1. ثبت زمان:
-     فقط یک لحظه را ثبت می‌کند.
-     مثال:
-     ساعت 10:30 → مطالعه KNN
+    <div class="actions">
 
-  2. ثبت کار:
-     برای کاری است که شروع و پایان دارد.
-     مثال:
-     ساعت 10:30 شروع مطالعه KNN
-     ساعت 12:00 پایان مطالعه KNN
--->
-<section class="card center">
+      <button class="tap" id="tap">
+        ثبت زمان
+      </button>
 
-  <div class="actions">
+      <button class="tap" id="taskTap">
+        ثبت کار
+      </button>
 
-    <button class="tap" id="tap">
-      ثبت زمان
-    </button>
+    </div>
 
-    <button class="tap" id="taskTap">
-      ثبت کار
-    </button>
+    <div id="restControls" style="display:none;margin-top:14px">
+      <button class="btn" id="restTap" type="button">
+        شروع استراحت
+      </button>
+    </div>
+
+    <div class="sub">
+      «ثبت زمان» یک لحظه را ثبت می‌کند؛
+      «ثبت کار» برای کاری است که شروع و پایان دارد.
+    </div>
+
+  </section>
+
+  <section class="goals-column">
+
+    <h2>اهداف فردا</h2>
+
+    <div id="goals"></div>
+
+  </section>
+
+</div>
+
+<button
+  class="menu-button"
+  id="menuButton"
+  aria-label="باز کردن منو"
+  aria-expanded="false"
+>
+  ☰
+</button>
+
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+<aside class="drawer" id="drawer">
+
+  <h2>منو</h2>
+
+  <div class="drawer-section">
+
+    <h3>ثبت‌های امروز</h3>
+
+    <div id="drawerEntries"></div>
 
   </div>
 
-  <div class="sub">
-    «ثبت زمان» یک لحظه را ثبت می‌کند؛
-    «ثبت کار» برای کاری است که شروع و پایان دارد.
+  <div class="drawer-section">
+
+    <h3>اهداف فردا</h3>
+
+    <div>
+
+      <input
+        id="goalInput"
+        maxlength="120"
+        placeholder="مثلاً مطالعه AI"
+        autocomplete="off"
+      >
+
+      <div style="display:flex;gap:10px">
+
+        <input
+          id="goalStart"
+          type="time"
+          aria-label="زمان شروع هدف"
+        >
+
+        <input
+          id="goalEnd"
+          type="time"
+          aria-label="زمان پایان هدف"
+        >
+
+      </div>
+
+      <button
+        type="button"
+        class="primary btn"
+        id="addGoal"
+      >
+        افزودن هدف
+      </button>
+
+    </div>
+
   </div>
 
-</section>
+  <div class="drawer-section">
 
+    <h3>گزارش</h3>
 
-<!--
-  بخش اهداف فردا:
-
-  هر هدف دو اطلاعات اصلی دارد:
-
-  text
-  متن خود هدف
-
-  done
-  مشخص می‌کند هدف انجام شده یا نه.
-
-  هدف‌های انجام‌نشده بعداً می‌توانند
-  داخل پنجره ثبت فعالیت به عنوان پیشنهاد ظاهر شوند.
--->
-<section class="card">
-
-  <h2 style="font-size:18px;margin-top:0">
-    اهداف فردا
-  </h2>
-
-  <div class="actions">
+    <label
+      for="reportDate"
+      style="display:block;margin-bottom:6px"
+    >
+      انتخاب تاریخ
+    </label>
 
     <input
-      id="goalInput"
-      maxlength="120"
-      placeholder="مثلاً ۱ ساعت AI"
-      autocomplete="off"
+      id="reportDate"
+      type="date"
+      aria-label="تاریخ گزارش"
     >
 
     <button
-      class="primary btn"
-      id="addGoal"
+      class="report"
+      id="report"
     >
-      افزودن هدف
+      نمایش گزارش روز
     </button>
 
   </div>
 
-  <div id="goals"></div>
-
-</section>
-
+</aside>
 
 <!--
-  این قسمت ثبت‌های لحظه‌ای را نمایش می‌دهد.
+  بخش اهداف فردا:
+  این قسمت برای تعیین کارهای فردا و علامت‌زدن کارهای انجام‌شده است.
+
+  هر هدف به صورت یک شیء شامل موارد زیر ذخیره می‌شود:
+  text      = متن هدف
+  done      = آیا هدف انجام شده یا نه
+  startTime = زمان شروع هدف
+  endTime   = زمان پایان هدف
+
+  هدف‌های انجام‌نشده می‌توانند در پنجره ثبت فعالیت
+  به عنوان پیشنهاد نمایش داده شوند.
 -->
-<section class="card">
 
-  <h2 style="font-size:18px;margin-top:0">
-    ثبت‌های امروز
-  </h2>
-
-  <div id="entries"></div>
-
-</section>
-
-
-<!--
-  این قسمت کارهایی را نمایش می‌دهد
-  که شروع و پایان داشته‌اند.
--->
-<section class="card">
-
-  <h2 style="font-size:18px;margin-top:0">
-    ثبت کارهای امروز
-  </h2>
-
-  <div id="tasks"></div>
-
-</section>
-
-
-<!--
-  گزارش امروز را می‌سازد
-  و سپس اطلاعات امروز را پاک می‌کند.
--->
-<button
-  class="report"
-  id="report"
->
-  گزارش امروز و پاک‌کردن اطلاعات
-</button>
-
-
-<!--
-  پنجره‌ای که هنگام ثبت زمان یا شروع کار باز می‌شود.
--->
 <dialog id="topicDialog">
 
   <h3 style="margin-top:0">
@@ -361,10 +198,6 @@ input{
     autocomplete="off"
   >
 
-  <!--
-    هدف‌های انجام‌نشده اینجا به صورت
-    پیشنهاد نمایش داده می‌شوند.
-  -->
   <div id="goalSuggestions"></div>
 
   <div class="dialog-actions">
@@ -373,10 +206,7 @@ input{
       لغو
     </button>
 
-    <button
-      class="primary"
-      id="save"
-    >
+    <button class="primary" id="save">
       ذخیره
     </button>
 
@@ -384,10 +214,6 @@ input{
 
 </dialog>
 
-
-<!--
-  پنجره گزارش روزانه.
--->
 <dialog id="reportDialog">
 
   <h3 style="margin-top:0">
@@ -407,653 +233,1136 @@ input{
 
 </dialog>
 
+<dialog id="qualityDialog">
+
+  <h3 style="margin-top:0">
+    کیفیت انجام کار
+  </h3>
+
+  <div
+    class="sub"
+    style="margin-top:0"
+  >
+    این کار را با چه کیفیتی انجام دادی؟
+  </div>
+
+  <div
+    id="qualityOptions"
+    style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:16px"
+  >
+
+    <button
+      type="button"
+      class="btn quality-btn"
+      data-quality="1"
+    >
+      ۱
+    </button>
+
+    <button
+      type="button"
+      class="btn quality-btn"
+      data-quality="2"
+    >
+      ۲
+    </button>
+
+    <button
+      type="button"
+      class="btn quality-btn"
+      data-quality="3"
+    >
+      ۳
+    </button>
+
+    <button
+      type="button"
+      class="btn quality-btn"
+      data-quality="4"
+    >
+      ۴
+    </button>
+
+    <button
+      type="button"
+      class="btn quality-btn"
+      data-quality="5"
+    >
+      ۵
+    </button>
+
+  </div>
+
+  <div
+    class="sub"
+    style="text-align:center"
+  >
+    ۱ = خیلی ضعیف&nbsp;&nbsp; ۵ = عالی
+  </div>
+
+</dialog>
 
 <script>
 
 /*
-  ============================================================
-  راهنمای کلی JavaScript
-  ============================================================
+=========================================================
+راهنمای کلی برنامه
+=========================================================
 
-  برنامه فعلاً کاملاً داخل مرورگر اجرا می‌شود.
+این برنامه فعلاً کاملاً سمت مرورگر اجرا می‌شود.
 
-  یعنی:
+یعنی برای اطلاعات شخصی کاربر، سرور جداگانه نداریم و
+اطلاعات با localStorage خود مرورگر ذخیره می‌شوند.
 
-  HTML
-      ↓
-  ظاهر برنامه
+در نتیجه:
 
-  CSS
-      ↓
-  شکل و ظاهر برنامه
+- بستن صفحه اطلاعات را حذف نمی‌کند.
+- باز کردن دوباره سایت اطلاعات را نگه می‌دارد.
+- داده‌های ثبت‌شده در مرورگر باقی می‌مانند.
+- اگر داده‌های سایت از مرورگر پاک شوند،
+  اطلاعات localStorage نیز ممکن است از بین بروند.
 
-  JavaScript
-      ↓
-  منطق و رفتار برنامه
+ساختار کلی برنامه:
 
-  localStorage
-      ↓
-  حافظه‌ای که اطلاعات برنامه در آن ذخیره می‌شود.
-
-
-  ما سه نوع داده اصلی داریم:
-
-  1. ثبت‌های لحظه‌ای
-  2. کارهای بازه‌ای
-  3. اهداف
-
-
-  برای هر نوع داده یک کلید جداگانه داریم.
+1. ثبت زمان لحظه‌ای
+2. ثبت کار با شروع و پایان
+3. ثبت استراحت
+4. ثبت کیفیت کار
+5. ثبت اهداف فردا
+6. گزارش روزهای مختلف
+7. آرشیو دائمی ثبت‌ها
+8. قفل ورود با رمز
+9. نمایش ساعت فعلی
+10. رابط کاربری مناسب موبایل
+=========================================================
 */
 
 
 /*
-  ============================================================
-  کلیدهای localStorage
-  ============================================================
+=========================================================
+کلیدهای localStorage
+=========================================================
+هر نوع داده کلید مخصوص خودش را دارد.
+این کار باعث می‌شود داده‌های مختلف با هم قاطی نشوند.
 */
 
+const KEY = 'time_tracker_entries_v1';
+// ثبت‌های لحظه‌ای مثل:
+// «ساعت ۱۰:۳۰ مطالعه کردم»
 
-// کلید مربوط به ثبت‌های لحظه‌ای
-const KEY='time_tracker_entries_v1';
+const GOAL_KEY = 'time_tracker_goals_v1';
+// اهداف فردا
 
-
-// تعداد میلی‌ثانیه‌های یک روز
-// برای تشخیص ثبت‌های مربوط به ۲۴ ساعت اخیر استفاده می‌شود.
-const DAY=24*60*60*1000;
-
-
-// کلید مربوط به اهداف
-const GOAL_KEY='time_tracker_goals_v1';
-
-
-// کلید مربوط به کارهای بازه‌ای
-const TASK_KEY='time_tracker_tasks_v1';
-
-
-// اگر یک کار در حال انجام باشد، اطلاعاتش موقتاً اینجا قرار می‌گیرد.
-//
-// مثلاً:
-//
-// activeTask = {
-//   topic: "مطالعه KNN",
-//   start: 1720000000000
-// }
-//
-// وقتی کار تمام شود، end هم اضافه می‌شود
-// و کل رکورد داخل localStorage ذخیره می‌شود.
-let activeTask=null;
-
-
-// یک میانبر برای document.getElementById
-//
-// به جای:
-//
-// document.getElementById('topic')
-//
-// می‌توانیم بنویسیم:
-//
-// $('topic')
-//
-const $=id=>document.getElementById(id);
+const TASK_KEY = 'time_tracker_tasks_v1';
+// کارهایی که زمان شروع و پایان دارند
 
 
 /*
-  ============================================================
-  ثبت‌های لحظه‌ای
-  ============================================================
+=========================================================
+وضعیت موقت برنامه
+=========================================================
 */
 
+// اگر الان یک کار در حال انجام باشد، اینجا نگه داشته می‌شود.
+let activeTask = null;
 
-// اطلاعات ثبت‌های لحظه‌ای را از localStorage می‌خواند.
-//
-// اگر چیزی وجود نداشته باشد:
-// []
-//
-// همچنین فقط ثبت‌هایی را نگه می‌دارد
-// که کمتر از ۲۴ ساعت از زمانشان گذشته باشد.
-function load(){
-  try{
-    return JSON.parse(
-      localStorage.getItem(KEY)||'[]'
-    ).filter(
-      e=>Date.now()-e.timestamp<DAY
-    )
-  }catch{
-    return []
+// کاری که تمام شده ولی هنوز امتیاز کیفیت نگرفته است.
+let pendingTask = null;
+
+// اگر الان وسط استراحت باشیم، زمان شروع استراحت اینجا قرار می‌گیرد.
+let activeBreak = null;
+
+
+/*
+=========================================================
+میانبر پیدا کردن عناصر HTML
+=========================================================
+*/
+
+const $ = id => document.getElementById(id);
+
+
+/*
+=========================================================
+سیستم رمز ورود
+=========================================================
+*/
+
+// رمز ورود برنامه
+const ACCESS_CODE = '5562798';
+
+// کلیدی که مشخص می‌کند کاربر قبلاً یک بار وارد برنامه شده یا نه.
+const ACCESS_KEY = 'time_tracker_unlocked_v1';
+
+
+/*
+اگر قبلاً رمز درست وارد شده باشد،
+دیگر صفحه ورود نمایش داده نمی‌شود.
+
+مهم:
+
+این سیستم یک قفل ساده سمت مرورگر است،
+نه سیستم امنیتی واقعی.
+
+چون سایت روی GitHub Pages اجرا می‌شود،
+کد سمت کاربر قرار دارد و قابل مشاهده است.
+*/
+
+function unlockApp() {
+
+  if (localStorage.getItem(ACCESS_KEY) === '1') {
+
+    $('lockScreen').style.display = 'none';
+
+    return;
+
   }
+
+  $('accessCode').focus();
+
 }
 
 
-// آرایه ثبت‌ها را به JSON تبدیل می‌کند
-// و در localStorage ذخیره می‌کند.
-function save(a){
+/*
+وقتی کاربر روی دکمه ورود کلیک می‌کند،
+رمز بررسی می‌شود.
+*/
+
+$('unlockButton').onclick = () => {
+
+  if ($('accessCode').value === ACCESS_CODE) {
+
+    /*
+    رمز درست است.
+    وضعیت بازشدن را در مرورگر نگه می‌داریم.
+    */
+
+    localStorage.setItem(ACCESS_KEY, '1');
+
+    // صفحه قفل را مخفی می‌کنیم.
+    $('lockScreen').style.display = 'none';
+
+    // ورودی را خالی می‌کنیم.
+    $('accessCode').value = '';
+
+    // پیام خطا را مخفی می‌کنیم.
+    $('lockError').style.display = 'none';
+
+  } else {
+
+    // رمز اشتباه
+    $('lockError').style.display = 'block';
+
+    // متن رمز انتخاب می‌شود تا راحت دوباره نوشته شود.
+    $('accessCode').select();
+
+  }
+
+};
+
+
+/*
+اگر کاربر Enter بزند،
+همان کار دکمه ورود انجام می‌شود.
+*/
+
+$('accessCode').onkeydown = e => {
+
+  if (e.key === 'Enter') {
+
+    $('unlockButton').click();
+
+  }
+
+};
+
+
+/*
+=========================================================
+ثبت‌های لحظه‌ای
+=========================================================
+*/
+
+/*
+همه ثبت‌های لحظه‌ای را از localStorage می‌خوانیم.
+*/
+
+function load() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem(KEY) || '[]'
+    );
+
+  } catch {
+
+    return [];
+
+  }
+
+}
+
+
+/*
+آرایه ثبت‌های لحظه‌ای را در localStorage ذخیره می‌کند.
+*/
+
+function save(a) {
+
   localStorage.setItem(
     KEY,
     JSON.stringify(a)
-  )
+  );
+
 }
 
 
-// timestamp خام را به ساعت قابل‌خواندن تبدیل می‌کند.
-//
-// مثلاً:
-//
-// 1720000000000
-//
-// تبدیل می‌شود به چیزی شبیه:
-//
-// ۱۰:۳۰:۲۵
-//
-function fmt(ts){
+/*
+timestamp را به ساعت و دقیقه فارسی تبدیل می‌کند.
+*/
+
+function fmt(ts) {
+
   return new Date(ts).toLocaleTimeString(
     'fa-IR',
     {
-      hour:'2-digit',
-      minute:'2-digit',
-      second:'2-digit'
+      hour: '2-digit',
+      minute: '2-digit'
     }
-  )
+  );
+
 }
 
 
 /*
-  ============================================================
-  اهداف
-  ============================================================
+برای گزارش، تاریخ کامل‌تر را نمایش می‌دهد.
 */
 
+function fmtDateTime(ts) {
 
-// اهداف فردا را از localStorage می‌خواند.
-function loadGoals(){
-  try{
-    return JSON.parse(
-      localStorage.getItem(GOAL_KEY)||'[]'
-    )
-  }catch{
-    return []
-  }
+  return new Date(ts).toLocaleString(
+    'fa-IR',
+    {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    }
+  );
+
 }
 
 
-// فهرست اهداف را در localStorage ذخیره می‌کند.
-function saveGoals(a){
+/*
+=========================================================
+مدیریت تاریخ
+=========================================================
+*/
+
+/*
+یک timestamp را به فرم:
+
+YYYY-MM-DD
+
+تبدیل می‌کند.
+
+این فرم برای input type="date"
+مناسب است.
+*/
+
+function dateKey(ts) {
+
+  const d = new Date(ts);
+
+  return (
+    d.getFullYear() +
+    '-' +
+    String(d.getMonth() + 1).padStart(2, '0') +
+    '-' +
+    String(d.getDate()).padStart(2, '0')
+  );
+
+}
+
+
+/*
+تاریخ امروز
+*/
+
+function todayKey() {
+
+  return dateKey(Date.now());
+
+}
+
+
+/*
+ثبت‌های یک روز خاص
+*/
+
+function entriesForDate(date) {
+
+  return load().filter(
+    e => dateKey(e.timestamp) === date
+  );
+
+}
+
+
+/*
+کارهای یک روز خاص
+
+در این نسخه تاریخ بر اساس زمان شروع کار تعیین می‌شود.
+*/
+
+function tasksForDate(date) {
+
+  return loadTasks().filter(
+    x => dateKey(x.start) === date
+  );
+
+}
+
+
+/*
+=========================================================
+اهداف
+=========================================================
+*/
+
+/*
+اهداف را از localStorage می‌خوانیم.
+*/
+
+function loadGoals() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem(GOAL_KEY) || '[]'
+    );
+
+  } catch {
+
+    return [];
+
+  }
+
+}
+
+
+/*
+ذخیره اهداف
+*/
+
+function saveGoals(a) {
+
   localStorage.setItem(
     GOAL_KEY,
     JSON.stringify(a)
-  )
+  );
+
 }
 
 
 /*
-  ============================================================
-  کارهای بازه‌ای
-  ============================================================
+=========================================================
+کارهای بازه‌ای
+=========================================================
 */
 
+/*
+خواندن کارهای ذخیره‌شده
+*/
 
-// کارهای ذخیره‌شده را می‌خواند.
-function loadTasks(){
-  try{
+function loadTasks() {
+
+  try {
+
     return JSON.parse(
-      localStorage.getItem(TASK_KEY)||'[]'
-    )
-  }catch{
-    return []
+      localStorage.getItem(TASK_KEY) || '[]'
+    );
+
+  } catch {
+
+    return [];
+
   }
+
 }
 
 
-// فهرست کارهای بازه‌ای را ذخیره می‌کند.
-//
-// هر کار معمولاً چیزی شبیه این است:
-//
-// {
-//   topic: "مطالعه KNN",
-//   start: 1720000000000,
-//   end: 1720005000000
-// }
-function saveTasks(a){
+/*
+ذخیره کارهای بازه‌ای
+*/
+
+function saveTasks(a) {
+
   localStorage.setItem(
     TASK_KEY,
     JSON.stringify(a)
-  )
+  );
+
 }
 
 
 /*
-  ============================================================
-  نمایش اهداف
-  ============================================================
+=========================================================
+استراحت‌ها
+=========================================================
 */
 
+/*
+مجموع مدت تمام استراحت‌های یک کار را محاسبه می‌کند.
+*/
 
-// این تابع فهرست اهداف را روی صفحه می‌سازد.
-//
-// خودش هدف جدید ایجاد نمی‌کند.
-// فقط اطلاعاتی که در حافظه داریم را به HTML تبدیل می‌کند.
-function renderGoals(){
+function totalBreakMs(task) {
 
-  const box=$('goals');
-  const a=loadGoals();
+  return (task.breaks || []).reduce(
+    (sum, b) => sum + (b.end - b.start),
+    0
+  );
 
-  // ابتدا محتوای قبلی را پاک می‌کنیم.
-  box.innerHTML='';
+}
 
 
-  // اگر هیچ هدفی وجود نداشت،
-  // پیام مناسب نشان می‌دهیم.
-  if(!a.length){
+/*
+مدت زمان را به متن خوانا تبدیل می‌کند.
 
-    box.innerHTML=
+مثلاً:
+
+25 دقیقه
+
+یا:
+
+1 ساعت و 20 دقیقه
+*/
+
+function formatDuration(ms) {
+
+  const minutes = Math.round(ms / 60000);
+
+  if (minutes < 60) {
+
+    return minutes + ' دقیقه';
+
+  }
+
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+
+  return m
+    ? h + ' ساعت و ' + m + ' دقیقه'
+    : h + ' ساعت';
+
+}
+
+
+/*
+=========================================================
+نمایش اهداف
+=========================================================
+*/
+
+/*
+این تابع فهرست اهداف را روی صفحه می‌سازد.
+
+برای هر هدف:
+
+- checkbox
+- عنوان
+- زمان
+- دکمه حذف
+
+ساخته می‌شود.
+*/
+
+function renderGoals() {
+
+  const box = $('goals');
+
+  const a = loadGoals();
+
+  box.innerHTML = '';
+
+  /*
+  اگر هیچ هدفی وجود نداشته باشد،
+  پیام مناسب نشان می‌دهیم.
+  */
+
+  if (!a.length) {
+
+    box.innerHTML =
       '<div class="empty">هنوز هدفی برای فردا تعیین نکرده‌ای.</div>';
 
     return;
+
   }
 
 
-  // تک‌تک اهداف را بررسی می‌کنیم.
-  a.forEach((g,i)=>{
+  /*
+  تمام اهداف را یکی‌یکی می‌سازیم.
+  */
 
-    const r=document.createElement('div');
+  a.forEach((g, i) => {
 
-    r.className='row';
+    const r = document.createElement('div');
+
+    r.className = 'goal-item';
 
 
     /*
-      برای هر هدف:
-
-      checkbox
-      متن هدف
-      دکمه حذف
+    خط اول:
+    checkbox + نام هدف + حذف
     */
-    r.innerHTML=`
-      <label
-        style="display:flex;align-items:center;gap:10px;flex:1"
-      >
 
-        <input
-          type="checkbox"
-          ${g.done?'checked':''}
-          data-goal-index="${i}"
-          style="width:auto;margin:0"
-        >
+    const titleLine =
+      document.createElement('div');
 
-        <span class="topic"></span>
-
-      </label>
-
-      <button
-        class="btn danger"
-        data-delete-goal="${i}"
-        style="flex:0 0 auto;padding:7px 10px"
-      >
-        حذف
-      </button>
-    `;
+    titleLine.className =
+      'goal-title-line';
 
 
-    // متن هدف را با textContent قرار می‌دهیم.
-    //
-    // این کار بهتر از قرار دادن مستقیم متن کاربر
-    // داخل innerHTML است.
-    r.querySelector('.topic').textContent=g.text;
+    /*
+    checkbox
+    */
 
+    const check =
+      document.createElement('input');
+
+    check.type = 'checkbox';
+
+    check.checked = !!g.done;
+
+    check.style.cssText =
+      'width:auto;margin:0';
+
+
+    /*
+    نام هدف
+    */
+
+    const text =
+      document.createElement('span');
+
+    text.className = 'topic';
+
+    text.textContent = g.text;
+
+
+    /*
+    دکمه حذف
+    */
+
+    const del =
+      document.createElement('button');
+
+    del.type = 'button';
+
+    del.className = 'btn danger';
+
+    del.textContent = 'حذف';
+
+
+    /*
+    وقتی حذف زده شد،
+    همان هدف از آرایه حذف می‌شود.
+    */
+
+    del.onclick = () => {
+
+      const goals = loadGoals();
+
+      goals.splice(i, 1);
+
+      saveGoals(goals);
+
+      renderGoals();
+
+    };
+
+
+    /*
+    وقتی checkbox تغییر کرد،
+    done تغییر می‌کند.
+    */
+
+    check.onchange = () => {
+
+      const goals = loadGoals();
+
+      if (goals[i]) {
+
+        goals[i].done =
+          check.checked;
+
+        saveGoals(goals);
+
+        renderGoals();
+
+      }
+
+    };
+
+
+    titleLine.append(
+      check,
+      text,
+      del
+    );
+
+
+    /*
+    خط دوم:
+    زمان هدف
+    */
+
+    const timeLine =
+      document.createElement('div');
+
+    timeLine.className =
+      'goal-time-line';
+
+
+    if (g.startTime && g.endTime) {
+
+      timeLine.textContent =
+        'از ' +
+        g.startTime +
+        ' تا ' +
+        g.endTime;
+
+    } else if (g.startTime) {
+
+      timeLine.textContent =
+        'از ' + g.startTime;
+
+    } else if (g.endTime) {
+
+      timeLine.textContent =
+        'تا ' + g.endTime;
+
+    } else {
+
+      timeLine.textContent =
+        'بدون زمان';
+
+    }
+
+
+    r.append(
+      titleLine,
+      timeLine
+    );
 
     box.appendChild(r);
 
   });
 
-
-  /*
-    وقتی checkbox تغییر کند،
-    وضعیت done همان هدف را تغییر می‌دهیم.
-  */
-  box
-    .querySelectorAll('[data-goal-index]')
-    .forEach(c=>{
-
-      c.onchange=()=>{
-
-        const a=loadGoals();
-
-        a[+c.dataset.goalIndex].done=c.checked;
-
-        saveGoals(a);
-
-        renderGoals();
-
-      }
-
-    });
-
-
-  /*
-    دکمه حذف هر هدف.
-  */
-  box
-    .querySelectorAll('[data-delete-goal]')
-    .forEach(b=>{
-
-      b.onclick=()=>{
-
-        const a=loadGoals();
-
-        a.splice(
-          +b.dataset.deleteGoal,
-          1
-        );
-
-        saveGoals(a);
-
-        renderGoals();
-
-      }
-
-    });
-
 }
 
 
 /*
-  ============================================================
-  ثبت یک لحظه
-  ============================================================
+=========================================================
+ثبت فعالیت لحظه‌ای
+=========================================================
 */
 
+/*
+یک فعالیت لحظه‌ای را ثبت می‌کند.
 
-// یک فعالیت لحظه‌ای را ثبت می‌کند.
-//
-// ساختار داده:
-//
-// {
-//   timestamp: زمان,
-//   topic: موضوع
-// }
-function saveTopic(topic){
+ساختار:
 
-  const a=load();
+{
+  timestamp: زمان,
+  topic: موضوع
+}
+*/
 
+function saveTopic(topic) {
 
-  // ثبت جدید را به انتهای آرایه اضافه می‌کنیم.
+  const a = load();
+
   a.push({
-    timestamp:Date.now(),
+
+    timestamp: Date.now(),
+
     topic
+
   });
 
-
-  // ذخیره در localStorage
   save(a);
 
-
-  // بستن پنجره
   $('topicDialog').close();
 
-
-  // به‌روزرسانی صفحه
   render();
 
-
-  // به‌روزرسانی پیشنهادهای هدف
   renderGoalSuggestions();
 
 }
 
 
 /*
-  ============================================================
-  شروع یک کار بازه‌ای
-  ============================================================
+=========================================================
+شروع کار
+=========================================================
 */
 
+/*
+شروع کار فقط زمان شروع را نگه می‌دارد.
 
-// شروع کار.
-//
-// اینجا هنوز کار را در localStorage ذخیره نمی‌کنیم.
-// فقط زمان شروع را در activeTask نگه می‌داریم.
-//
-// وقتی کار تمام شد، finishTask اجرا می‌شود.
-function startTask(topicOverride){
+تا وقتی کار تمام نشده،
+اطلاعات آن در activeTask قرار دارد.
+*/
 
-  /*
-    اگر topicOverride وجود داشته باشد
-    از آن استفاده می‌کنیم.
+function startTask(topicOverride) {
 
-    این قسمت برای وقتی مهم است که کاربر
-    روی یکی از اهداف پیشنهادی کلیک می‌کند.
+  const topic =
+    (topicOverride ?? $('topic').value).trim();
 
-    مثلاً:
-
-    startTask("مطالعه KNN")
-
-    در این حالت دیگر لازم نیست متن input را بخوانیم.
-  */
-  const topic=(
-    topicOverride??
-    $('topic').value
-  ).trim();
+  if (!topic) return;
 
 
-  // اگر موضوع خالی بود، کاری انجام نمی‌دهیم.
-  if(!topic)return;
+  $('topic').value = topic;
 
 
-  // متن انتخاب‌شده را داخل input هم قرار می‌دهیم.
-  $('topic').value=topic;
+  activeTask = {
 
-
-  // ساخت اطلاعات کار در حال انجام
-  activeTask={
     topic,
-    start:Date.now()
+
+    start: Date.now(),
+
+    breaks: []
+
   };
 
 
-  // پنجره بسته می‌شود.
+  activeBreak = null;
+
+
   $('topicDialog').close();
 
 
-  // متن دکمه تغییر می‌کند.
-  $('taskTap').textContent='پایان کار';
+  /*
+  متن دکمه تغییر می‌کند تا کاربر بفهمد
+  اکنون یک کار در حال اجراست.
+  */
 
-}
-
-
-/*
-  ============================================================
-  پایان یک کار
-  ============================================================
-*/
-
-
-// وقتی کار تمام شد این تابع اجرا می‌شود.
-function finishTask(){
-
-  // اگر کاری در حال انجام نباشد، کاری نمی‌کنیم.
-  if(!activeTask)return;
+  $('taskTap').textContent =
+    'پایان کار';
 
 
   /*
-    حالا رکورد کامل می‌شود:
-
-    topic
-    start
-    end
+  کنترل استراحت ظاهر می‌شود.
   */
-  const task={
-    topic:activeTask.topic,
-    start:activeTask.start,
-    end:Date.now()
-  };
+
+  $('restControls').style.display =
+    'block';
 
 
-  // کارهای قبلی را می‌خوانیم.
-  const a=loadTasks();
-
-
-  // کار جدید را اضافه می‌کنیم.
-  a.push(task);
-
-
-  // ذخیره می‌کنیم.
-  saveTasks(a);
-
-
-  // دیگر کاری در حال انجام نیست.
-  activeTask=null;
-
-
-  // دکمه به حالت اولیه برمی‌گردد.
-  $('taskTap').textContent='ثبت کار';
-
-
-  // نمایش کارهای امروز به‌روزرسانی می‌شود.
-  renderTasks();
+  $('restTap').textContent =
+    'شروع استراحت';
 
 }
 
 
 /*
-  ============================================================
-  نمایش کارهای بازه‌ای
-  ============================================================
+=========================================================
+پایان کار
+=========================================================
 */
 
+function finishTask() {
 
-// کارهای ذخیره‌شده را روی صفحه نشان می‌دهد.
-function renderTasks(){
-
-  const box=$('tasks');
-
-  box.innerHTML='';
+  if (!activeTask) return;
 
 
-  const a=loadTasks();
+  /*
+  اگر هنوز در حالت استراحت باشیم،
+  اجازه پایان کار نداریم.
 
+  ابتدا باید استراحت تمام شود.
+  */
 
-  // اگر کاری ثبت نشده باشد.
-  if(!a.length){
+  if (activeBreak) {
 
-    box.innerHTML=
-      '<div class="empty">هنوز کار بازه‌ای ثبت نشده.</div>';
+    alert(
+      'اول استراحت را پایان بده.'
+    );
 
     return;
+
   }
 
 
-  // نمایش تک‌تک کارها
-  a.forEach(t=>{
+  /*
+  حالا کار آماده ذخیره است.
 
-    const r=document.createElement('div');
+  اما هنوز کیفیت را نگرفته‌ایم،
+  بنابراین موقتاً در pendingTask نگه می‌داریم.
+  */
 
-    r.className='row';
+  pendingTask = {
+
+    topic: activeTask.topic,
+
+    start: activeTask.start,
+
+    end: Date.now(),
+
+    breaks: [
+      ...(activeTask.breaks || [])
+    ]
+
+  };
 
 
-    r.innerHTML=`
-      <span class="time">
-        ${fmt(t.start)} تا ${fmt(t.end)}
-      </span>
+  /*
+  کار فعلی تمام شد.
+  */
 
-      <span class="topic"></span>
-    `;
+  activeTask = null;
 
-
-    // نام کار
-    r.querySelector('.topic').textContent=t.topic;
+  activeBreak = null;
 
 
-    box.appendChild(r);
+  $('taskTap').textContent =
+    'ثبت کار';
 
-  });
+
+  $('restControls').style.display =
+    'none';
+
+
+  $('restTap').textContent =
+    'شروع استراحت';
+
+
+  /*
+  پنجره کیفیت باز می‌شود.
+  */
+
+  $('qualityDialog').showModal();
 
 }
 
 
 /*
-  ============================================================
-  پیشنهاد اهداف
-  ============================================================
+=========================================================
+شروع / پایان استراحت
+=========================================================
 */
 
+/*
+اگر استراحت فعال نباشد:
 
-// حالت پنجره مشخص می‌کند که هدف انتخاب‌شده
-// قرار است «ثبت زمان» باشد یا «شروع کار».
-//
-// mode:
-// time
-// task
-//
-// اگر mode مشخص نشود، از dialogMode استفاده می‌کنیم.
-function renderGoalSuggestions(mode=dialogMode){
+شروع استراحت
 
-  const box=$('goalSuggestions');
+و اگر استراحت فعال باشد:
 
-  box.innerHTML='';
+پایان استراحت
+
+انجام می‌شود.
+*/
+
+$('restTap').onclick = () => {
+
+  if (!activeTask) return;
 
 
   /*
-    فقط اهدافی را می‌گیریم که هنوز انجام نشده‌اند.
-
-    slice(0,3)
-    یعنی حداکثر سه هدف نشان داده می‌شود.
+  پایان استراحت
   */
-  const matches=
-    loadGoals()
-      .filter(g=>!g.done)
-      .slice(0,3);
+
+  if (activeBreak) {
+
+    activeTask.breaks.push({
+
+      start: activeBreak.start,
+
+      end: Date.now()
+
+    });
+
+    activeBreak = null;
+
+    $('restTap').textContent =
+      'شروع استراحت';
+
+    return;
+
+  }
 
 
-  matches.forEach(g=>{
+  /*
+  شروع استراحت
+  */
 
-    const b=document.createElement('button');
+  activeBreak = {
 
+    start: Date.now()
 
-    b.type='button';
-
-    b.className='btn';
-
-
-    b.style.cssText=
-      'width:100%;margin-bottom:8px;text-align:right';
+  };
 
 
-    b.textContent=g.text;
+  $('restTap').textContent =
+    'پایان استراحت';
+
+};
 
 
-    /*
-      وقتی روی یک هدف پیشنهادی کلیک شود:
-    */
-    b.onclick=()=>{
+/*
+=========================================================
+ثبت کیفیت
+=========================================================
+*/
+
+/*
+وقتی کار تمام می‌شود،
+کاربر از 1 تا 5 کیفیت را انتخاب می‌کند.
+*/
+
+document
+  .querySelectorAll('.quality-btn')
+  .forEach(button => {
+
+    button.onclick = () => {
+
+      if (!pendingTask) return;
 
 
       /*
-        اگر پنجره در حالت task باشد،
-        هدف به عنوان یک «کار در حال انجام»
-        شروع می‌شود.
+      عدد انتخاب‌شده را ذخیره می‌کنیم.
       */
-      if(mode==='task'){
+
+      pendingTask.quality =
+        Number(
+          button.dataset.quality
+        );
+
+
+      /*
+      کار را به آرشیو اضافه می‌کنیم.
+      */
+
+      const a = loadTasks();
+
+      a.push(pendingTask);
+
+      saveTasks(a);
+
+
+      /*
+      دیگر کار موقت نیست.
+      */
+
+      pendingTask = null;
+
+
+      $('qualityDialog').close();
+
+      renderTasks();
+
+    };
+
+  });
+
+
+/*
+=========================================================
+نمایش کارها
+=========================================================
+*/
+
+function renderTasks() {
+
+  render();
+
+}
+
+
+/*
+=========================================================
+پیشنهاد اهداف داخل پنجره ثبت
+=========================================================
+*/
+
+/*
+mode مشخص می‌کند کاربر در حالت:
+
+time
+
+یا:
+
+task
+
+قرار دارد.
+*/
+
+function renderGoalSuggestions(
+  mode = dialogMode
+) {
+
+  const box =
+    $('goalSuggestions');
+
+  box.innerHTML = '';
+
+
+  /*
+  فقط اهداف انجام‌نشده را می‌گیریم
+  و سه مورد اول را نشان می‌دهیم.
+  */
+
+  const matches =
+    loadGoals()
+      .filter(g => !g.done)
+      .slice(0, 3);
+
+
+  matches.forEach(g => {
+
+    const b =
+      document.createElement('button');
+
+    b.type = 'button';
+
+    b.className = 'btn';
+
+    b.style.cssText =
+      'width:100%;margin-bottom:8px;text-align:right';
+
+    b.textContent = g.text;
+
+
+    b.onclick = () => {
+
+
+      /*
+      اگر در حالت ثبت کار باشیم،
+      انتخاب هدف باعث شروع همان کار می‌شود.
+      */
+
+      if (mode === 'task') {
 
         startTask(g.text);
 
 
-        /*
-          فقط اگر startTask واقعاً موفق شده باشد،
-          هدف را انجام‌شده علامت می‌زنیم.
-        */
-        if(activeTask){
+        if (activeTask) {
 
-          const a=loadGoals();
+          const a = loadGoals();
 
-
-          const index=
+          const index =
             a.findIndex(
-              x=>x.text===g.text&&!x.done
+              x => x.text === g.text && !x.done
             );
 
 
-          if(index!==-1){
+          if (index !== -1) {
 
-            a[index].done=true;
+            a[index].done = true;
 
             saveGoals(a);
 
@@ -1063,27 +1372,26 @@ function renderGoalSuggestions(mode=dialogMode){
 
         }
 
-      }
+
+      } else {
 
 
-      /*
-        در حالت time:
-        هدف به عنوان یک ثبت لحظه‌ای ذخیره می‌شود.
-      */
-      else{
+        /*
+        اگر در حالت ثبت لحظه‌ای باشیم،
+        همان هدف به عنوان فعالیت ثبت می‌شود.
+        */
 
-        const a=loadGoals();
+        const a = loadGoals();
 
-
-        const index=
+        const index =
           a.findIndex(
-            x=>x.text===g.text&&!x.done
+            x => x.text === g.text && !x.done
           );
 
 
-        if(index!==-1){
+        if (index !== -1) {
 
-          a[index].done=true;
+          a[index].done = true;
 
           saveGoals(a);
 
@@ -1107,61 +1415,110 @@ function renderGoalSuggestions(mode=dialogMode){
 
 
 /*
-  ============================================================
-  نمایش ثبت‌های لحظه‌ای
-  ============================================================
+=========================================================
+نمایش ثبت‌های امروز
+=========================================================
 */
 
+/*
+آرشیو کامل پاک نمی‌شود.
 
-// این تابع مسئول نمایش ثبت‌های ذخیره‌شده است.
-//
-// داده جدیدی تولید نمی‌کند.
-// فقط داده موجود را به UI تبدیل می‌کند.
-function render(){
+فقط اطلاعات روز جاری از آرشیو جدا شده
+و در این قسمت نمایش داده می‌شود.
+*/
 
-  const box=$('entries');
+function render() {
 
-  const a=load();
+  const box =
+    $('drawerEntries');
+
+
+  const a =
+    entriesForDate(
+      todayKey()
+    );
+
+
+  const t =
+    tasksForDate(
+      todayKey()
+    );
+
+
+  box.innerHTML = '';
 
 
   /*
-    دوباره ذخیره می‌کنیم تا موارد قدیمی‌تر از ۲۴ ساعت
-    که load حذف کرده، از حافظه هم حذف شوند.
+  اگر هیچ چیزی امروز ثبت نشده باشد.
   */
-  save(a);
 
+  if (!a.length && !t.length) {
 
-  box.innerHTML='';
-
-
-  // اگر چیزی ثبت نشده باشد.
-  if(!a.length){
-
-    box.innerHTML=
-      '<div class="empty">هنوز چیزی ثبت نشده.</div>';
+    box.innerHTML =
+      '<div class="empty">امروز چیزی ثبت نشده.</div>';
 
     return;
+
   }
 
 
-  // نمایش ثبت‌ها
-  a.forEach(e=>{
+  /*
+  ثبت‌های لحظه‌ای
+  */
 
-    const r=document.createElement('div');
+  a.forEach(e => {
 
-    r.className='row';
+    const r =
+      document.createElement('div');
+
+    r.className = 'row';
+
+    r.innerHTML =
+      `<span class="time">${fmt(e.timestamp)}</span>
+       <span class="topic"></span>`;
 
 
-    r.innerHTML=`
-      <span class="time">
-        ${fmt(e.timestamp)}
+    r.querySelector('.topic').textContent =
+      e.topic;
+
+
+    box.appendChild(r);
+
+  });
+
+
+  /*
+  کارهای بازه‌ای
+  */
+
+  t.forEach(x => {
+
+    const r =
+      document.createElement('div');
+
+    r.className = 'row';
+
+
+    r.innerHTML =
+      `<span class="time">
+        ${fmt(x.start)} تا ${fmt(x.end)}
       </span>
-
-      <span class="topic"></span>
-    `;
+      <span class="topic"></span>`;
 
 
-    r.querySelector('.topic').textContent=e.topic;
+    /*
+    اطلاعات کار
+
+    مثال:
+
+    مطالعه AI — کیفیت 4/5 — استراحت 23 دقیقه
+    */
+
+    r.querySelector('.topic').textContent =
+      x.quality
+        ? `${x.topic} — کیفیت ${x.quality}/5 — استراحت ${formatDuration(totalBreakMs(x))}`
+        : x.topic +
+          ` — استراحت ${formatDuration(totalBreakMs(x))}`;
 
 
     box.appendChild(r);
@@ -1172,22 +1529,24 @@ function render(){
 
 
 /*
-  ============================================================
-  ساعت
-  ============================================================
+=========================================================
+ساعت
+=========================================================
 */
 
+/*
+ساعت دستگاه را نمایش می‌دهد.
+*/
 
-// ساعت فعلی دستگاه را روی صفحه نشان می‌دهد.
-function clock(){
+function clock() {
 
-  $('clock').textContent=
+  $('clock').textContent =
     new Date().toLocaleTimeString(
       'fa-IR',
       {
-        hour:'2-digit',
-        minute:'2-digit',
-        second:'2-digit'
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
       }
     );
 
@@ -1195,35 +1554,35 @@ function clock(){
 
 
 /*
-  ============================================================
-  حالت پنجره
-  ============================================================
+=========================================================
+حالت پنجره ثبت
+=========================================================
 */
 
-
-// مشخص می‌کند پنجره فعلی برای چه کاری باز شده.
-//
-// time
-// یعنی ثبت زمان.
-//
-// task
-// یعنی شروع یک کار.
-let dialogMode='time';
+let dialogMode = 'time';
 
 
-// دکمه لغو
-$('cancel').onclick=()=>{
-  $('topicDialog').close();
-};
+/*
+دکمه لغو
+*/
+
+$('cancel').onclick =
+  () => $('topicDialog').close();
 
 
-// تابع مخصوص ثبت زمان از داخل پنجره
-function saveTimeFromDialog(){
+/*
+=========================================================
+ثبت زمان از پنجره
+=========================================================
+*/
 
-  const topic=$('topic').value.trim();
+function saveTimeFromDialog() {
+
+  const topic =
+    $('topic').value.trim();
 
 
-  if(!topic)return;
+  if (!topic) return;
 
 
   saveTopic(topic);
@@ -1231,42 +1590,32 @@ function saveTimeFromDialog(){
 }
 
 
-// حالت پیش‌فرض دکمه ذخیره
-$('save').onclick=saveTimeFromDialog;
+$('save').onclick =
+  saveTimeFromDialog;
 
 
 /*
-  ============================================================
-  دکمه «ثبت زمان»
-  ============================================================
+=========================================================
+دکمه ثبت زمان
+=========================================================
 */
 
+$('tap').onclick = () => {
 
-$('tap').onclick=()=>{
+  dialogMode = 'time';
 
-  // حالت پنجره = ثبت زمان
-  dialogMode='time';
+  $('topic').value = '';
 
-
-  // input را خالی می‌کنیم.
-  $('topic').value='';
-
-
-  // سه هدف پیشنهادی را نشان می‌دهیم.
   renderGoalSuggestions('time');
 
+  $('save').onclick =
+    saveTimeFromDialog;
 
-  // عملکرد دکمه ذخیره
-  $('save').onclick=saveTimeFromDialog;
-
-
-  // باز کردن پنجره
   $('topicDialog').showModal();
 
 
-  // کمی بعد input را focus می‌کنیم.
   setTimeout(
-    ()=>$('topic').focus(),
+    () => $('topic').focus(),
     50
   );
 
@@ -1274,19 +1623,20 @@ $('tap').onclick=()=>{
 
 
 /*
-  ============================================================
-  دکمه «ثبت کار»
-  ============================================================
+=========================================================
+دکمه ثبت کار
+=========================================================
 */
 
+$('taskTap').onclick = () => {
 
-$('taskTap').onclick=()=>{
 
   /*
-    اگر همین الان کاری در حال انجام باشد،
-    کلیک روی دکمه یعنی «پایان کار».
+  اگر یک کار در حال انجام است،
+  کلیک روی دکمه یعنی پایان کار.
   */
-  if(activeTask){
+
+  if (activeTask) {
 
     finishTask();
 
@@ -1295,27 +1645,27 @@ $('taskTap').onclick=()=>{
   }
 
 
-  // در غیر این صورت می‌خواهیم یک کار جدید شروع کنیم.
-  dialogMode='task';
+  /*
+  در غیر این صورت،
+  پنجره شروع کار باز می‌شود.
+  */
 
+  dialogMode = 'task';
 
-  $('topic').value='';
+  $('topic').value = '';
 
-
-  // هدف‌های پیشنهادی را در حالت task نشان می‌دهیم.
   renderGoalSuggestions('task');
 
 
-  // دکمه ذخیره در این حالت startTask را اجرا می‌کند.
-  $('save').onclick=()=>startTask();
+  $('save').onclick =
+    () => startTask();
 
 
-  // نمایش پنجره
   $('topicDialog').showModal();
 
 
   setTimeout(
-    ()=>$('topic').focus(),
+    () => $('topic').focus(),
     50
   );
 
@@ -1323,262 +1673,414 @@ $('taskTap').onclick=()=>{
 
 
 /*
-  ============================================================
-  تغییر متن input
-  ============================================================
+وقتی متن ورودی تغییر می‌کند،
+پیشنهادهای اهداف دوباره ساخته می‌شوند.
 */
 
-
-// وقتی کاربر شروع به تایپ می‌کند، پیشنهادهای هدف
-// دوباره بر اساس حالت فعلی پنجره ساخته می‌شوند.
-//
-// نکته مهم:
-// از dialogMode استفاده می‌کنیم تا اگر در حالت task هستیم،
-// تایپ کردن باعث نشود برنامه دوباره وارد حالت time شود.
-$('topic').oninput=()=>{
-  renderGoalSuggestions(dialogMode);
-};
+$('topic').oninput = () =>
+  renderGoalSuggestions(
+    dialogMode
+  );
 
 
 /*
-  ============================================================
-  زدن Enter
-  ============================================================
+با Enter دکمه ذخیره اجرا می‌شود.
 */
 
+$('topic').onkeydown = e => {
 
-// با زدن Enter همان کاری را می‌کند
-// که دکمه ذخیره انجام می‌دهد.
-$('topic').onkeydown=e=>{
+  if (e.key === 'Enter') {
 
-  if(e.key==='Enter'){
     $('save').click();
+
   }
 
 };
 
 
 /*
-  ============================================================
-  افزودن هدف جدید
-  ============================================================
+=========================================================
+افزودن هدف
+=========================================================
 */
 
+/*
+ساختار هدف جدید:
 
-function addGoal(){
+{
+  text,
+  done,
+  startTime,
+  endTime
+}
+*/
 
-  // متن input را می‌گیریم.
-  const text=$('goalInput').value.trim();
+function addGoal(event) {
+
+  if (event)
+    event.preventDefault();
 
 
-  // اگر خالی بود، کاری نمی‌کنیم.
-  if(!text)return;
+  const text =
+    $('goalInput').value.trim();
 
 
-  // اهداف فعلی
-  const a=loadGoals();
+  const startTime =
+    $('goalStart').value;
+
+
+  const endTime =
+    $('goalEnd').value;
 
 
   /*
-    هدف جدید:
-
-    text = متن هدف
-    done = false
-
-    یعنی هنوز انجام نشده.
+  هدف بدون متن قابل ثبت نیست.
   */
+
+  if (!text) {
+
+    $('goalInput').focus();
+
+    return;
+
+  }
+
+
+  /*
+  اگر هر دو زمان وجود داشته باشند،
+  زمان پایان نباید قبل یا مساوی زمان شروع باشد.
+  */
+
+  if (
+    startTime &&
+    endTime &&
+    startTime >= endTime
+  ) {
+
+    alert(
+      'زمان پایان باید بعد از زمان شروع باشد.'
+    );
+
+    return;
+
+  }
+
+
+  const a =
+    loadGoals();
+
+
   a.push({
+
     text,
-    done:false
+
+    done: false,
+
+    startTime,
+
+    endTime
+
   });
 
 
-  // ذخیره
   saveGoals(a);
 
 
-  // خالی کردن input
-  $('goalInput').value='';
+  /*
+  فرم را خالی می‌کنیم.
+  */
+
+  $('goalInput').value = '';
+
+  $('goalStart').value = '';
+
+  $('goalEnd').value = '';
 
 
-  // نمایش دوباره اهداف
   renderGoals();
 
 }
 
 
-// کلیک روی «افزودن هدف»
-$('addGoal').onclick=addGoal;
+/*
+دکمه افزودن هدف
+*/
+
+$('addGoal')
+  .addEventListener(
+    'click',
+    addGoal
+  );
 
 
-// Enter در input هدف
-$('goalInput').onkeydown=e=>{
+/*
+Enter داخل عنوان هدف
+*/
 
-  if(e.key==='Enter'){
+$('goalInput').onkeydown = e => {
+
+  if (e.key === 'Enter') {
+
     addGoal();
+
   }
 
 };
 
 
 /*
-  ============================================================
-  گزارش روزانه
-  ============================================================
+=========================================================
+گزارش
+=========================================================
 */
 
+/*
+گزارش برای هر تاریخی که کاربر انتخاب کند ساخته می‌شود.
+*/
 
-// وقتی روی گزارش کلیک شود:
-$('report').onclick=()=>{
+$('report').onclick = () => {
 
-
-  // ثبت‌های لحظه‌ای
-  const a=load();
-
-
-  // کارهای بازه‌ای
-  const t=loadTasks();
+  const date =
+    $('reportDate').value ||
+    todayKey();
 
 
-  /*
-    ابتدا بخش ثبت‌های لحظه‌ای گزارش را می‌سازیم.
-  */
-  $('reportText').innerHTML=
-
-    '<h4>ثبت زمان</h4>'+
-
-    (
-      a.length
-
-      ?
-
-      a.map(e=>`
-        <div class="row">
-
-          <span class="time">
-            ${fmt(e.timestamp)}
-          </span>
-
-          <span class="topic"></span>
-
-        </div>
-      `).join('')
-
-      :
-
-      '<div class="empty">امروز موردی ثبت نشده.</div>'
-    )+
+  const a =
+    entriesForDate(date);
 
 
-    '<h4 style="margin-top:18px">ثبت کار</h4>'+
-    '<div id="reportTasks"></div>';
+  const t =
+    tasksForDate(date);
 
 
   /*
-    متن موضوع ثبت‌های لحظه‌ای را
-    با textContent قرار می‌دهیم.
+  عنوان گزارش
   */
-  [
-    ...$('reportText')
-      .querySelectorAll('.topic')
-  ]
-  .forEach((n,i)=>{
-    n.textContent=a[i].topic;
+
+  $('reportText').innerHTML =
+    '<h4>گزارش ' +
+    date +
+    '</h4>';
+
+
+  const box =
+    document.createElement('div');
+
+
+  /*
+  اگر هیچ داده‌ای وجود نداشت.
+  */
+
+  if (!a.length && !t.length) {
+
+    box.innerHTML =
+      '<div class="empty">برای این روز موردی ثبت نشده.</div>';
+
+  }
+
+
+  /*
+  ثبت‌های لحظه‌ای
+  */
+
+  a.forEach(e => {
+
+    const r =
+      document.createElement('div');
+
+    r.className = 'row';
+
+
+    r.innerHTML =
+      `<span class="time">
+        ${fmtDateTime(e.timestamp)}
+      </span>
+      <span class="topic"></span>`;
+
+
+    r.querySelector('.topic').textContent =
+      e.topic;
+
+
+    box.appendChild(r);
+
   });
 
 
   /*
-    حالا بخش کارهای بازه‌ای گزارش را می‌سازیم.
+  کارهای بازه‌ای
   */
-  const box=$('reportTasks');
+
+  t.forEach(x => {
+
+    const r =
+      document.createElement('div');
+
+    r.className = 'row';
 
 
-  if(!t.length){
-
-    box.innerHTML=
-      '<div class="empty">هنوز کار بازه‌ای ثبت نشده.</div>';
-
-  }
-
-
-  else{
-
-    t.forEach(x=>{
-
-      const r=document.createElement('div');
-
-      r.className='row';
+    r.innerHTML =
+      `<span class="time">
+        ${fmtDateTime(x.start)}
+        تا
+        ${fmtDateTime(x.end)}
+      </span>
+      <span class="topic"></span>`;
 
 
-      r.innerHTML=`
-        <span class="time">
-          ${fmt(x.start)} تا ${fmt(x.end)}
-        </span>
+    /*
+    متن اصلی کار
+    */
 
-        <span class="topic"></span>
-      `;
-
-
-      r.querySelector('.topic').textContent=x.topic;
-
-
-      box.appendChild(r);
-
-    });
-
-  }
+    r.querySelector('.topic').textContent =
+      x.quality
+        ? `${x.topic} — کیفیت ${x.quality}/5 — استراحت ${formatDuration(totalBreakMs(x))}`
+        : x.topic +
+          ` — استراحت ${formatDuration(totalBreakMs(x))}`;
 
 
-  /*
-    گزارش ساخته شده،
-    پس پنجره را نمایش می‌دهیم.
-  */
-  $('reportDialog').showModal();
+    /*
+    نمایش دقیق زمان‌های استراحت
+    */
+
+    if ((x.breaks || []).length) {
+
+      x.breaks.forEach(b => {
+
+        const br =
+          document.createElement('div');
+
+        br.style.cssText =
+          'font-size:13px;color:#777;padding:5px 0 0 0';
 
 
-  /*
-    بعد از ساخته شدن گزارش،
-    اطلاعات امروز پاک می‌شوند.
-
-    خود گزارش داخل پنجره باقی می‌ماند،
-    بنابراین کاربر می‌تواند آن را ببیند.
-  */
-  save([]);
-
-  saveTasks([]);
+        br.textContent =
+          'استراحت: ' +
+          fmtDateTime(b.start) +
+          ' تا ' +
+          fmtDateTime(b.end);
 
 
-  // صفحه اصلی هم به‌روزرسانی می‌شود.
-  render();
+        r.appendChild(br);
 
-  renderTasks();
+      });
 
-};
+    }
 
 
-// بستن گزارش
-$('closeReport').onclick=()=>{
-  $('reportDialog').close();
+    box.appendChild(r);
+
+  });
+
+
+  $('reportText')
+    .appendChild(box);
+
+
+  $('reportDialog')
+    .showModal();
+
 };
 
 
 /*
-  ============================================================
-  شروع برنامه
-  ============================================================
-
-  وقتی صفحه برای اولین بار باز می‌شود:
-
-  1. ساعت نمایش داده می‌شود.
-  2. ساعت هر ثانیه آپدیت می‌شود.
-  3. ثبت‌های امروز نمایش داده می‌شوند.
-  4. اهداف نمایش داده می‌شوند.
-  5. کارهای امروز نمایش داده می‌شوند.
-  6. ثبت‌های لحظه‌ای هر ۶۰ ثانیه دوباره بررسی می‌شوند.
+=========================================================
+منوی کناری
+=========================================================
 */
 
+/*
+دکمه منو باز و بسته کردن drawer را انجام می‌دهد.
+*/
+
+$('menuButton').onclick = () => {
+
+  const open =
+    $('drawer')
+      .classList
+      .toggle('open');
+
+
+  $('drawerBackdrop')
+    .classList
+    .toggle(
+      'show',
+      open
+    );
+
+
+  $('menuButton')
+    .setAttribute(
+      'aria-expanded',
+      String(open)
+    );
+
+};
+
+
+/*
+با کلیک روی فضای پشت منو،
+drawer بسته می‌شود.
+*/
+
+$('drawerBackdrop').onclick = () => {
+
+  $('drawer')
+    .classList
+    .remove('open');
+
+
+  $('drawerBackdrop')
+    .classList
+    .remove('show');
+
+
+  $('menuButton')
+    .setAttribute(
+      'aria-expanded',
+      'false'
+    );
+
+};
+
+
+/*
+=========================================================
+بستن گزارش
+=========================================================
+*/
+
+$('closeReport').onclick =
+  () => $('reportDialog').close();
+
+
+/*
+=========================================================
+شروع برنامه
+=========================================================
+*/
+
+/*
+ابتدا بررسی می‌کنیم آیا کاربر قبلاً وارد شده است یا نه.
+
+سپس:
+
+- ساعت
+- گزارش روز
+- ثبت‌های امروز
+- اهداف
+
+نمایش داده می‌شوند.
+*/
+
+unlockApp();
 
 clock();
+
+
+/*
+ساعت هر یک ثانیه به‌روز می‌شود.
+*/
 
 setInterval(
   clock,
@@ -1586,12 +2088,28 @@ setInterval(
 );
 
 
+/*
+تاریخ گزارش به صورت پیش‌فرض امروز است.
+*/
+
+$('reportDate').value =
+  todayKey();
+
+
+/*
+نمایش اولیه
+*/
+
 render();
 
 renderGoals();
 
 renderTasks();
 
+
+/*
+ثبت‌های امروز هر 60 ثانیه دوباره نمایش داده می‌شوند.
+*/
 
 setInterval(
   render,
