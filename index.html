@@ -1,2124 +1,2115 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Time Tracker</title>
-<style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color-scheme:light dark}body{margin:0;background:#f4f4f7;color:#17171a}.app{max-width:900px;margin:auto;min-height:100vh;padding:24px 18px;box-sizing:border-box}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}h1{font-size:25px;margin:0}.clock{font-variant-numeric:tabular-nums;font-size:18px;color:#666}.main-layout{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:18px;align-items:start}.card{background:#fff;border:1px solid #ddd;border-radius:24px;padding:22px;margin-bottom:16px}.center{text-align:center}.actions{display:flex;gap:14px;justify-content:center;align-items:center}.tap{width:190px;height:190px;flex:0 0 190px;border-radius:50%;border:0;background:#111;color:#fff;font-size:22px;font-weight:700;cursor:pointer;box-shadow:0 8px 24px #0002}.tap:active{transform:scale(.97)}.sub{color:#777;font-size:14px;margin-top:14px}.row{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid #eee}.row:last-child{border-bottom:0}.time{font-variant-numeric:tabular-nums;font-weight:700}.topic{color:#555}.btn{flex:1;padding:13px;border-radius:14px;border:1px solid #ccc;background:#fff;font-weight:600;cursor:pointer}.danger{color:#b00020}.empty{color:#777;text-align:center;padding:15px}.report{width:100%;padding:14px;border-radius:15px;border:0;background:#111;color:#fff;font-weight:700;cursor:pointer}.goals-column{padding:8px 0}.goals-column h2{margin:4px 0 14px;font-size:21px}.goals-column .btn{width:auto}.goals-column .goal-item{padding:10px 0;border-bottom:1px solid #ddd}.goals-column .goal-item:last-child{border-bottom:0}.goals-column .goal-title-line{display:flex;align-items:center;gap:8px}.goals-column .goal-title-line .btn{flex:0 0 auto;padding:5px 8px}.goals-column .goal-time-line{margin:5px 0 0 27px;font-size:13px;color:#777}.menu-button{position:fixed;top:14px;right:14px;z-index:20;width:46px;height:46px;border:0;border-radius:14px;background:#111;color:#fff;font-size:24px;cursor:pointer;box-shadow:0 6px 18px #0003}.drawer{position:fixed;top:0;right:0;z-index:19;width:min(330px,86vw);height:100vh;box-sizing:border-box;padding:78px 18px 24px;background:#fff;box-shadow:-8px 0 30px #0003;transform:translateX(105%);transition:transform .2s ease;overflow:auto}.drawer.open{transform:translateX(0)}.drawer-backdrop{position:fixed;inset:0;z-index:18;background:#0006;display:none}.drawer-backdrop.show{display:block}.drawer h2{margin-top:0}.drawer-section{padding:16px 0;border-bottom:1px solid #eee}.drawer-section:last-child{border-bottom:0}.drawer .report{margin-top:8px}dialog{border:0;border-radius:22px;padding:22px;max-width:calc(100% - 44px);width:360px}dialog::backdrop{background:#0007}input{width:100%;box-sizing:border-box;padding:14px;border-radius:12px;border:1px solid #ccc;font-size:16px;margin:12px 0}.dialog-actions{display:flex;gap:10px}.dialog-actions button{flex:1;padding:12px;border-radius:12px;border:1px solid #ccc}.primary{background:#111!important;color:#fff;border-color:#111!important}.lock-screen{position:fixed;inset:0;z-index:999;background:#f4f4f7;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box}.lock-card{width:min(360px,100%);background:#fff;border:1px solid #ddd;border-radius:24px;padding:26px;box-sizing:border-box;text-align:center}.lock-error{display:none;color:#b00020;font-size:14px;margin-top:10px}@media(max-width:760px){.main-layout{grid-template-columns:1fr}.goals-column{padding:0 4px 16px}}@media(prefers-color-scheme:dark){body{background:#111;color:#eee}.card,.drawer,.lock-card{background:#1c1c1e;border-color:#333}.btn,input{background:#242426;color:#eee;border-color:#444}.topic,.sub,.clock{color:#aaa}.row,.drawer-section{border-color:#333}.lock-screen{background:#111}dialog{background:#1c1c1e;color:#eee}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ثبت زمان</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Tahoma, Arial, sans-serif;
+      background: #f4f4f4;
+      color: #222;
+    }
+
+    body.dark {
+      background: #181818;
+      color: #eee;
+    }
+
+    button,
+    input {
+      font-family: inherit;
+    }
+
+    /* =========================
+       صفحه قفل
+    ========================= */
+
+    #lockScreen {
+      position: fixed;
+      inset: 0;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    body.dark #lockScreen {
+      background: #181818;
+    }
+
+    .lockBox {
+      width: min(90%, 360px);
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 5px 25px rgba(0,0,0,.12);
+    }
+
+    body.dark .lockBox {
+      background: #252525;
+    }
+
+    .lockBox input {
+      width: 100%;
+      padding: 12px;
+      margin: 15px 0;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .lockBox button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #222;
+      color: white;
+    }
+
+    #lockError {
+      color: #e74c3c;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* =========================
+       هدر
+    ========================= */
+
+    header {
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+
+    #clock {
+      font-size: 20px;
+      opacity: .7;
+    }
+
+    /* =========================
+       صفحه اصلی
+    ========================= */
+
+    .container {
+      width: min(1100px, 94%);
+      margin: auto;
+    }
+
+    .mainCard {
+      background: white;
+      border-radius: 25px;
+      padding: 30px;
+      min-height: 500px;
+      box-shadow: 0 5px 25px rgba(0,0,0,.08);
+    }
+
+    body.dark .mainCard {
+      background: #252525;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    .bigButton {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      background: #222;
+      color: white;
+      font-size: 22px;
+      transition: .2s;
+    }
+
+    .bigButton:hover {
+      transform: scale(1.04);
+    }
+
+    #taskTap {
+      background: #444;
+    }
+
+    /* =========================
+       استراحت
+    ========================= */
+
+    #restControls {
+      display: none;
+      text-align: center;
+      margin-top: 25px;
+    }
+
+    #restTap {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background: #f39c12;
+      color: white;
+      font-size: 16px;
+    }
+
+    /* =========================
+       اهداف
+    ========================= */
+
+    #goals {
+      margin-top: 40px;
+    }
+
+    #goals h2 {
+      margin-bottom: 15px;
+    }
+
+    .goalItem {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      margin-bottom: 8px;
+      background: #f2f2f2;
+      border-radius: 12px;
+    }
+
+    body.dark .goalItem {
+      background: #333;
+    }
+
+    .goalText {
+      flex: 1;
+    }
+
+    .goalTime {
+      font-size: 13px;
+      opacity: .7;
+    }
+
+    .deleteGoal {
+      border: none;
+      background: #e74c3c;
+      color: white;
+      border-radius: 7px;
+      padding: 6px 9px;
+      cursor: pointer;
+    }
+
+    /* =========================
+       دکمه منو
+    ========================= */
+
+    #menuButton {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 2000;
+      width: 48px;
+      height: 48px;
+      border: none;
+      border-radius: 50%;
+      background: #222;
+      color: white;
+      cursor: pointer;
+      font-size: 22px;
+    }
+
+    /* =========================
+       پس‌زمینه Drawer
+    ========================= */
+
+    #backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      display: none;
+      z-index: 1998;
+    }
+
+    #backdrop.show {
+      display: block;
+    }
+
+    /* =========================
+       Drawer
+    ========================= */
+
+    #drawer {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: min(400px, 90%);
+      height: 100%;
+      background: white;
+      z-index: 1999;
+      padding: 25px;
+      overflow-y: auto;
+      transition: right .25s;
+      box-shadow: -5px 0 20px rgba(0,0,0,.15);
+    }
+
+    body.dark #drawer {
+      background: #252525;
+    }
+
+    #drawer.open {
+      right: 0;
+    }
+
+    #drawer h2 {
+      margin-top: 0;
+    }
+
+    .entry {
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 10px;
+      background: #f1f1f1;
+    }
+
+    body.dark .entry {
+      background: #333;
+    }
+
+    /* =========================
+       فرم اهداف
+    ========================= */
+
+    .goalForm {
+      margin-top: 30px;
+    }
+
+    .goalForm input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .goalForm button,
+    #report {
+      width: 100%;
+      padding: 11px;
+      border: none;
+      border-radius: 9px;
+      cursor: pointer;
+      background: #222;
+      color: white;
+    }
+
+    /* =========================
+       Dialog
+    ========================= */
+
+    dialog {
+      width: min(500px, 92%);
+      border: none;
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.25);
+    }
+
+    dialog::backdrop {
+      background: rgba(0,0,0,.5);
+    }
+
+    body.dark dialog {
+      background: #252525;
+      color: white;
+    }
+
+    dialog input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      margin: 10px 0;
+    }
+
+    dialog button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 9px;
+      cursor: pointer;
+      margin: 4px;
+    }
+
+    #save {
+      background: #222;
+      color: white;
+    }
+
+    #cancel,
+    #closeReport {
+      background: #ddd;
+    }
+
+    /* =========================
+       پیشنهاد اهداف
+    ========================= */
+
+    #goalSuggestions {
+      margin: 10px 0;
+    }
+
+    .suggestion {
+      padding: 10px;
+      margin-bottom: 7px;
+      background: #eee;
+      border-radius: 9px;
+      cursor: pointer;
+    }
+
+    body.dark .suggestion {
+      background: #333;
+    }
+
+    /* =========================
+       کیفیت کار
+    ========================= */
+
+    .qualityButtons {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .qualityButtons button {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: #222;
+      color: white;
+    }
+
+    /* =========================
+       گزارش
+    ========================= */
+
+    .reportItem {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+
+      padding: 14px;
+      margin-bottom: 12px;
+
+      border: 1px solid #ddd;
+      border-radius: 12px;
+
+      background: #fafafa;
+    }
+
+    body.dark .reportItem {
+      background: #303030;
+      border-color: #444;
+    }
+
+    .reportItemContent {
+      flex: 1;
+      line-height: 1.8;
+    }
+
+    .deleteReportBtn {
+      flex-shrink: 0;
+
+      border: none;
+      border-radius: 8px;
+
+      padding: 8px 12px;
+
+      cursor: pointer;
+
+      background: #e74c3c;
+      color: white;
+    }
+
+    .deleteReportBtn:hover {
+      opacity: .85;
+    }
+
+    /* =========================
+       موبایل
+    ========================= */
+
+    @media (max-width: 760px) {
+      header h1 {
+        font-size: 24px;
+      }
+
+      .mainCard {
+        padding: 20px;
+      }
+
+      .bigButton {
+        width: 150px;
+        height: 150px;
+        font-size: 19px;
+      }
+
+      .reportItem {
+        align-items: flex-start;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="lock-screen" id="lockScreen">
-  <div class="lock-card">
-    <h2>ورود به ثبت زمان</h2>
-    <div class="sub">برای ورود رمز را وارد کن.</div>
+  <!-- =========================
+       صفحه قفل
+  ========================= -->
 
-    <input
-      id="accessCode"
-      type="password"
-      inputmode="numeric"
-      autocomplete="off"
-      placeholder="رمز ورود"
-    >
+  <div id="lockScreen">
+    <div class="lockBox">
+      <h2>برنامه قفل است</h2>
 
-    <button class="primary btn" id="unlockButton" type="button">
-      ورود
-    </button>
+      <input
+        id="accessCode"
+        type="password"
+        inputmode="numeric"
+        placeholder="رمز ورود"
+      >
 
-    <div class="lock-error" id="lockError">
-      رمز واردشده درست نیست.
+      <button id="unlockButton">
+        ورود
+      </button>
+
+      <div id="lockError">
+        رمز اشتباه است
+      </div>
     </div>
   </div>
-</div>
 
-<main class="app" id="app">
 
-<header>
-  <h1>ثبت زمان</h1>
-  <div class="clock" id="clock">--:--:--</div>
-</header>
+  <!-- =========================
+       دکمه منو
+  ========================= -->
 
-<div class="main-layout">
+  <button id="menuButton" aria-expanded="false">
+    ☰
+  </button>
 
-  <section class="card center">
+  <div id="backdrop"></div>
 
-    <div class="actions">
 
-      <button class="tap" id="tap">
-        ثبت زمان
-      </button>
+  <!-- =========================
+       Drawer
+  ========================= -->
 
-      <button class="tap" id="taskTap">
-        ثبت کار
-      </button>
+  <aside id="drawer">
 
-    </div>
-
-    <div id="restControls" style="display:none;margin-top:14px">
-      <button class="btn" id="restTap" type="button">
-        شروع استراحت
-      </button>
-    </div>
-
-    <div class="sub">
-      «ثبت زمان» یک لحظه را ثبت می‌کند؛
-      «ثبت کار» برای کاری است که شروع و پایان دارد.
-    </div>
-
-  </section>
-
-  <section class="goals-column">
-
-    <h2>اهداف فردا</h2>
-
-    <div id="goals"></div>
-
-  </section>
-
-</div>
-
-<button
-  class="menu-button"
-  id="menuButton"
-  aria-label="باز کردن منو"
-  aria-expanded="false"
->
-  ☰
-</button>
-
-<div class="drawer-backdrop" id="drawerBackdrop"></div>
-
-<aside class="drawer" id="drawer">
-
-  <h2>منو</h2>
-
-  <div class="drawer-section">
-
-    <h3>ثبت‌های امروز</h3>
+    <h2>امروز</h2>
 
     <div id="drawerEntries"></div>
 
-  </div>
 
-  <div class="drawer-section">
+    <!-- اهداف -->
 
-    <h3>اهداف فردا</h3>
+    <div class="goalForm">
 
-    <div>
+      <h3>هدف جدید</h3>
 
       <input
         id="goalInput"
-        maxlength="120"
-        placeholder="مثلاً مطالعه AI"
-        autocomplete="off"
+        type="text"
+        placeholder="مثلاً مطالعه هوش مصنوعی"
       >
 
-      <div style="display:flex;gap:10px">
-
-        <input
-          id="goalStart"
-          type="time"
-          aria-label="زمان شروع هدف"
-        >
-
-        <input
-          id="goalEnd"
-          type="time"
-          aria-label="زمان پایان هدف"
-        >
-
-      </div>
-
-      <button
-        type="button"
-        class="primary btn"
-        id="addGoal"
+      <input
+        id="goalStart"
+        type="time"
       >
+
+      <input
+        id="goalEnd"
+        type="time"
+      >
+
+      <button id="addGoal">
         افزودن هدف
       </button>
 
     </div>
 
-  </div>
 
-  <div class="drawer-section">
+    <!-- گزارش -->
 
-    <h3>گزارش</h3>
+    <div style="margin-top:30px">
 
-    <label
-      for="reportDate"
-      style="display:block;margin-bottom:6px"
-    >
-      انتخاب تاریخ
-    </label>
+      <h3>گزارش روز</h3>
+
+      <input
+        id="reportDate"
+        type="date"
+        style="
+          width:100%;
+          padding:10px;
+          margin-bottom:10px;
+          border:1px solid #ccc;
+          border-radius:8px;
+        "
+      >
+
+      <button id="report">
+        مشاهده گزارش
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- =========================
+       هدر
+  ========================= -->
+
+  <header>
+
+    <h1>ثبت زمان</h1>
+
+    <div id="clock">
+      --:--
+    </div>
+
+  </header>
+
+
+  <!-- =========================
+       محتوای اصلی
+  ========================= -->
+
+  <main class="container">
+
+    <section class="mainCard">
+
+      <div class="buttons">
+
+        <button
+          id="tap"
+          class="bigButton"
+        >
+          ثبت زمان
+        </button>
+
+
+        <button
+          id="taskTap"
+          class="bigButton"
+        >
+          ثبت کار
+        </button>
+
+      </div>
+
+
+      <!-- استراحت -->
+
+      <div id="restControls">
+
+        <button id="restTap">
+          شروع استراحت
+        </button>
+
+      </div>
+
+
+      <!-- اهداف -->
+
+      <section id="goals">
+
+        <h2>
+          اهداف فردا
+        </h2>
+
+      </section>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       دیالوگ ثبت زمان / کار
+  ========================= -->
+
+  <dialog id="topicDialog">
+
+    <h3 id="topicDialogTitle">
+      موضوع
+    </h3>
 
     <input
-      id="reportDate"
-      type="date"
-      aria-label="تاریخ گزارش"
+      id="topic"
+      type="text"
+      placeholder="چه کاری انجام دادی؟"
     >
 
-    <button
-      class="report"
-      id="report"
-    >
-      نمایش گزارش روز
-    </button>
-
-  </div>
-
-</aside>
-
-<!--
-  بخش اهداف فردا:
-  این قسمت برای تعیین کارهای فردا و علامت‌زدن کارهای انجام‌شده است.
-
-  هر هدف به صورت یک شیء شامل موارد زیر ذخیره می‌شود:
-  text      = متن هدف
-  done      = آیا هدف انجام شده یا نه
-  startTime = زمان شروع هدف
-  endTime   = زمان پایان هدف
-
-  هدف‌های انجام‌نشده می‌توانند در پنجره ثبت فعالیت
-  به عنوان پیشنهاد نمایش داده شوند.
--->
-
-<dialog id="topicDialog">
-
-  <h3 style="margin-top:0">
-    موضوع چیست؟
-  </h3>
-
-  <input
-    id="topic"
-    maxlength="120"
-    placeholder="مثلاً مطالعه KNN"
-    autocomplete="off"
-  >
-
-  <div id="goalSuggestions"></div>
-
-  <div class="dialog-actions">
-
-    <button id="cancel">
-      لغو
-    </button>
-
-    <button class="primary" id="save">
-      ذخیره
-    </button>
-
-  </div>
-
-</dialog>
-
-<dialog id="reportDialog">
-
-  <h3 style="margin-top:0">
-    گزارش امروز
-  </h3>
-
-  <div id="reportText"></div>
-
-  <div
-    class="dialog-actions"
-    style="margin-top:15px"
-  >
-    <button id="closeReport">
-      بستن
-    </button>
-  </div>
-
-</dialog>
-
-<dialog id="qualityDialog">
-
-  <h3 style="margin-top:0">
-    کیفیت انجام کار
-  </h3>
-
-  <div
-    class="sub"
-    style="margin-top:0"
-  >
-    این کار را با چه کیفیتی انجام دادی؟
-  </div>
-
-  <div
-    id="qualityOptions"
-    style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:16px"
-  >
-
-    <button
-      type="button"
-      class="btn quality-btn"
-      data-quality="1"
-    >
-      ۱
-    </button>
-
-    <button
-      type="button"
-      class="btn quality-btn"
-      data-quality="2"
-    >
-      ۲
-    </button>
-
-    <button
-      type="button"
-      class="btn quality-btn"
-      data-quality="3"
-    >
-      ۳
-    </button>
-
-    <button
-      type="button"
-      class="btn quality-btn"
-      data-quality="4"
-    >
-      ۴
-    </button>
-
-    <button
-      type="button"
-      class="btn quality-btn"
-      data-quality="5"
-    >
-      ۵
-    </button>
-
-  </div>
-
-  <div
-    class="sub"
-    style="text-align:center"
-  >
-    ۱ = خیلی ضعیف&nbsp;&nbsp; ۵ = عالی
-  </div>
-
-</dialog>
-
-<script>
-
-/*
-=========================================================
-راهنمای کلی برنامه
-=========================================================
+    <div id="goalSuggestions"></div>
 
-این برنامه فعلاً کاملاً سمت مرورگر اجرا می‌شود.
+    <div style="text-align:center">
 
-یعنی برای اطلاعات شخصی کاربر، سرور جداگانه نداریم و
-اطلاعات با localStorage خود مرورگر ذخیره می‌شوند.
+      <button id="save">
+        ثبت
+      </button>
 
-در نتیجه:
+      <button id="cancel">
+        لغو
+      </button>
 
-- بستن صفحه اطلاعات را حذف نمی‌کند.
-- باز کردن دوباره سایت اطلاعات را نگه می‌دارد.
-- داده‌های ثبت‌شده در مرورگر باقی می‌مانند.
-- اگر داده‌های سایت از مرورگر پاک شوند،
-  اطلاعات localStorage نیز ممکن است از بین بروند.
+    </div>
 
-ساختار کلی برنامه:
+  </dialog>
 
-1. ثبت زمان لحظه‌ای
-2. ثبت کار با شروع و پایان
-3. ثبت استراحت
-4. ثبت کیفیت کار
-5. ثبت اهداف فردا
-6. گزارش روزهای مختلف
-7. آرشیو دائمی ثبت‌ها
-8. قفل ورود با رمز
-9. نمایش ساعت فعلی
-10. رابط کاربری مناسب موبایل
-=========================================================
-*/
 
+  <!-- =========================
+       دیالوگ کیفیت
+  ========================= -->
 
-/*
-=========================================================
-کلیدهای localStorage
-=========================================================
-هر نوع داده کلید مخصوص خودش را دارد.
-این کار باعث می‌شود داده‌های مختلف با هم قاطی نشوند.
-*/
+  <dialog id="qualityDialog">
 
-const KEY = 'time_tracker_entries_v1';
-// ثبت‌های لحظه‌ای مثل:
-// «ساعت ۱۰:۳۰ مطالعه کردم»
+    <h3>
+      کیفیت این کار چطور بود؟
+    </h3>
 
-const GOAL_KEY = 'time_tracker_goals_v1';
-// اهداف فردا
+    <p>
+      از ۱ تا ۵ انتخاب کن
+    </p>
 
-const TASK_KEY = 'time_tracker_tasks_v1';
-// کارهایی که زمان شروع و پایان دارند
+    <div class="qualityButtons">
 
+      <button data-quality="1">1</button>
+      <button data-quality="2">2</button>
+      <button data-quality="3">3</button>
+      <button data-quality="4">4</button>
+      <button data-quality="5">5</button>
 
-/*
-=========================================================
-وضعیت موقت برنامه
-=========================================================
-*/
+    </div>
 
-// اگر الان یک کار در حال انجام باشد، اینجا نگه داشته می‌شود.
-let activeTask = null;
+  </dialog>
 
-// کاری که تمام شده ولی هنوز امتیاز کیفیت نگرفته است.
-let pendingTask = null;
 
-// اگر الان وسط استراحت باشیم، زمان شروع استراحت اینجا قرار می‌گیرد.
-let activeBreak = null;
+  <!-- =========================
+       دیالوگ گزارش
+  ========================= -->
 
+  <dialog id="reportDialog">
 
-/*
-=========================================================
-میانبر پیدا کردن عناصر HTML
-=========================================================
-*/
+    <h3>
+      گزارش روز
+    </h3>
 
-const $ = id => document.getElementById(id);
+    <div id="reportText"></div>
 
+    <div style="text-align:center; margin-top:15px">
 
-/*
-=========================================================
-سیستم رمز ورود
-=========================================================
-*/
+      <button id="closeReport">
+        بستن
+      </button>
 
-// رمز ورود برنامه
-const ACCESS_CODE = '5562798';
+    </div>
 
-// کلیدی که مشخص می‌کند کاربر قبلاً یک بار وارد برنامه شده یا نه.
-const ACCESS_KEY = 'time_tracker_unlocked_v1';
+  </dialog>
 
 
-/*
-اگر قبلاً رمز درست وارد شده باشد،
-دیگر صفحه ورود نمایش داده نمی‌شود.
+  <script>
 
-مهم:
+    /* ==================================================
+       تنظیمات اصلی
+    ================================================== */
 
-این سیستم یک قفل ساده سمت مرورگر است،
-نه سیستم امنیتی واقعی.
+    const KEY = 'time_tracker_entries_v1';
 
-چون سایت روی GitHub Pages اجرا می‌شود،
-کد سمت کاربر قرار دارد و قابل مشاهده است.
-*/
+    const GOAL_KEY = 'time_tracker_goals_v1';
 
-function unlockApp() {
+    const TASK_KEY = 'time_tracker_tasks_v1';
 
-  if (localStorage.getItem(ACCESS_KEY) === '1') {
+    const ACCESS_CODE = '5562798';
 
-    $('lockScreen').style.display = 'none';
+    const ACCESS_KEY = 'time_tracker_unlocked_v1';
 
-    return;
 
-  }
+    /* ==================================================
+       وضعیت موقت برنامه
+    ================================================== */
 
-  $('accessCode').focus();
+    let activeTask = null;
 
-}
+    let pendingTask = null;
 
+    let activeBreak = null;
 
-/*
-وقتی کاربر روی دکمه ورود کلیک می‌کند،
-رمز بررسی می‌شود.
-*/
+    let dialogMode = 'time';
 
-$('unlockButton').onclick = () => {
 
-  if ($('accessCode').value === ACCESS_CODE) {
+    /* ==================================================
+       دسترسی سریع به عناصر
+    ================================================== */
 
-    /*
-    رمز درست است.
-    وضعیت بازشدن را در مرورگر نگه می‌داریم.
-    */
+    const $ = id => document.getElementById(id);
 
-    localStorage.setItem(ACCESS_KEY, '1');
 
-    // صفحه قفل را مخفی می‌کنیم.
-    $('lockScreen').style.display = 'none';
+    /* ==================================================
+       قفل برنامه
+    ================================================== */
 
-    // ورودی را خالی می‌کنیم.
-    $('accessCode').value = '';
+    function unlockApp() {
 
-    // پیام خطا را مخفی می‌کنیم.
-    $('lockError').style.display = 'none';
+      if (localStorage.getItem(ACCESS_KEY) === '1') {
 
-  } else {
-
-    // رمز اشتباه
-    $('lockError').style.display = 'block';
-
-    // متن رمز انتخاب می‌شود تا راحت دوباره نوشته شود.
-    $('accessCode').select();
-
-  }
-
-};
-
-
-/*
-اگر کاربر Enter بزند،
-همان کار دکمه ورود انجام می‌شود.
-*/
-
-$('accessCode').onkeydown = e => {
-
-  if (e.key === 'Enter') {
-
-    $('unlockButton').click();
-
-  }
-
-};
-
-
-/*
-=========================================================
-ثبت‌های لحظه‌ای
-=========================================================
-*/
-
-/*
-همه ثبت‌های لحظه‌ای را از localStorage می‌خوانیم.
-*/
-
-function load() {
-
-  try {
-
-    return JSON.parse(
-      localStorage.getItem(KEY) || '[]'
-    );
-
-  } catch {
-
-    return [];
-
-  }
-
-}
-
-
-/*
-آرایه ثبت‌های لحظه‌ای را در localStorage ذخیره می‌کند.
-*/
-
-function save(a) {
-
-  localStorage.setItem(
-    KEY,
-    JSON.stringify(a)
-  );
-
-}
-
-
-/*
-timestamp را به ساعت و دقیقه فارسی تبدیل می‌کند.
-*/
-
-function fmt(ts) {
-
-  return new Date(ts).toLocaleTimeString(
-    'fa-IR',
-    {
-      hour: '2-digit',
-      minute: '2-digit'
-    }
-  );
-
-}
-
-
-/*
-برای گزارش، تاریخ کامل‌تر را نمایش می‌دهد.
-*/
-
-function fmtDateTime(ts) {
-
-  return new Date(ts).toLocaleString(
-    'fa-IR',
-    {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit'
-    }
-  );
-
-}
-
-
-/*
-=========================================================
-مدیریت تاریخ
-=========================================================
-*/
-
-/*
-یک timestamp را به فرم:
-
-YYYY-MM-DD
-
-تبدیل می‌کند.
-
-این فرم برای input type="date"
-مناسب است.
-*/
-
-function dateKey(ts) {
-
-  const d = new Date(ts);
-
-  return (
-    d.getFullYear() +
-    '-' +
-    String(d.getMonth() + 1).padStart(2, '0') +
-    '-' +
-    String(d.getDate()).padStart(2, '0')
-  );
-
-}
-
-
-/*
-تاریخ امروز
-*/
-
-function todayKey() {
-
-  return dateKey(Date.now());
-
-}
-
-
-/*
-ثبت‌های یک روز خاص
-*/
-
-function entriesForDate(date) {
-
-  return load().filter(
-    e => dateKey(e.timestamp) === date
-  );
-
-}
-
-
-/*
-کارهای یک روز خاص
-
-در این نسخه تاریخ بر اساس زمان شروع کار تعیین می‌شود.
-*/
-
-function tasksForDate(date) {
-
-  return loadTasks().filter(
-    x => dateKey(x.start) === date
-  );
-
-}
-
-
-/*
-=========================================================
-اهداف
-=========================================================
-*/
-
-/*
-اهداف را از localStorage می‌خوانیم.
-*/
-
-function loadGoals() {
-
-  try {
-
-    return JSON.parse(
-      localStorage.getItem(GOAL_KEY) || '[]'
-    );
-
-  } catch {
-
-    return [];
-
-  }
-
-}
-
-
-/*
-ذخیره اهداف
-*/
-
-function saveGoals(a) {
-
-  localStorage.setItem(
-    GOAL_KEY,
-    JSON.stringify(a)
-  );
-
-}
-
-
-/*
-=========================================================
-کارهای بازه‌ای
-=========================================================
-*/
-
-/*
-خواندن کارهای ذخیره‌شده
-*/
-
-function loadTasks() {
-
-  try {
-
-    return JSON.parse(
-      localStorage.getItem(TASK_KEY) || '[]'
-    );
-
-  } catch {
-
-    return [];
-
-  }
-
-}
-
-
-/*
-ذخیره کارهای بازه‌ای
-*/
-
-function saveTasks(a) {
-
-  localStorage.setItem(
-    TASK_KEY,
-    JSON.stringify(a)
-  );
-
-}
-
-
-/*
-=========================================================
-استراحت‌ها
-=========================================================
-*/
-
-/*
-مجموع مدت تمام استراحت‌های یک کار را محاسبه می‌کند.
-*/
-
-function totalBreakMs(task) {
-
-  return (task.breaks || []).reduce(
-    (sum, b) => sum + (b.end - b.start),
-    0
-  );
-
-}
-
-
-/*
-مدت زمان را به متن خوانا تبدیل می‌کند.
-
-مثلاً:
-
-25 دقیقه
-
-یا:
-
-1 ساعت و 20 دقیقه
-*/
-
-function formatDuration(ms) {
-
-  const minutes = Math.round(ms / 60000);
-
-  if (minutes < 60) {
-
-    return minutes + ' دقیقه';
-
-  }
-
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-
-  return m
-    ? h + ' ساعت و ' + m + ' دقیقه'
-    : h + ' ساعت';
-
-}
-
-
-/*
-=========================================================
-نمایش اهداف
-=========================================================
-*/
-
-/*
-این تابع فهرست اهداف را روی صفحه می‌سازد.
-
-برای هر هدف:
-
-- checkbox
-- عنوان
-- زمان
-- دکمه حذف
-
-ساخته می‌شود.
-*/
-
-function renderGoals() {
-
-  const box = $('goals');
-
-  const a = loadGoals();
-
-  box.innerHTML = '';
-
-  /*
-  اگر هیچ هدفی وجود نداشته باشد،
-  پیام مناسب نشان می‌دهیم.
-  */
-
-  if (!a.length) {
-
-    box.innerHTML =
-      '<div class="empty">هنوز هدفی برای فردا تعیین نکرده‌ای.</div>';
-
-    return;
-
-  }
-
-
-  /*
-  تمام اهداف را یکی‌یکی می‌سازیم.
-  */
-
-  a.forEach((g, i) => {
-
-    const r = document.createElement('div');
-
-    r.className = 'goal-item';
-
-
-    /*
-    خط اول:
-    checkbox + نام هدف + حذف
-    */
-
-    const titleLine =
-      document.createElement('div');
-
-    titleLine.className =
-      'goal-title-line';
-
-
-    /*
-    checkbox
-    */
-
-    const check =
-      document.createElement('input');
-
-    check.type = 'checkbox';
-
-    check.checked = !!g.done;
-
-    check.style.cssText =
-      'width:auto;margin:0';
-
-
-    /*
-    نام هدف
-    */
-
-    const text =
-      document.createElement('span');
-
-    text.className = 'topic';
-
-    text.textContent = g.text;
-
-
-    /*
-    دکمه حذف
-    */
-
-    const del =
-      document.createElement('button');
-
-    del.type = 'button';
-
-    del.className = 'btn danger';
-
-    del.textContent = 'حذف';
-
-
-    /*
-    وقتی حذف زده شد،
-    همان هدف از آرایه حذف می‌شود.
-    */
-
-    del.onclick = () => {
-
-      const goals = loadGoals();
-
-      goals.splice(i, 1);
-
-      saveGoals(goals);
-
-      renderGoals();
-
-    };
-
-
-    /*
-    وقتی checkbox تغییر کرد،
-    done تغییر می‌کند.
-    */
-
-    check.onchange = () => {
-
-      const goals = loadGoals();
-
-      if (goals[i]) {
-
-        goals[i].done =
-          check.checked;
-
-        saveGoals(goals);
-
-        renderGoals();
-
-      }
-
-    };
-
-
-    titleLine.append(
-      check,
-      text,
-      del
-    );
-
-
-    /*
-    خط دوم:
-    زمان هدف
-    */
-
-    const timeLine =
-      document.createElement('div');
-
-    timeLine.className =
-      'goal-time-line';
-
-
-    if (g.startTime && g.endTime) {
-
-      timeLine.textContent =
-        'از ' +
-        g.startTime +
-        ' تا ' +
-        g.endTime;
-
-    } else if (g.startTime) {
-
-      timeLine.textContent =
-        'از ' + g.startTime;
-
-    } else if (g.endTime) {
-
-      timeLine.textContent =
-        'تا ' + g.endTime;
-
-    } else {
-
-      timeLine.textContent =
-        'بدون زمان';
-
-    }
-
-
-    r.append(
-      titleLine,
-      timeLine
-    );
-
-    box.appendChild(r);
-
-  });
-
-}
-
-
-/*
-=========================================================
-ثبت فعالیت لحظه‌ای
-=========================================================
-*/
-
-/*
-یک فعالیت لحظه‌ای را ثبت می‌کند.
-
-ساختار:
-
-{
-  timestamp: زمان,
-  topic: موضوع
-}
-*/
-
-function saveTopic(topic) {
-
-  const a = load();
-
-  a.push({
-
-    timestamp: Date.now(),
-
-    topic
-
-  });
-
-  save(a);
-
-  $('topicDialog').close();
-
-  render();
-
-  renderGoalSuggestions();
-
-}
-
-
-/*
-=========================================================
-شروع کار
-=========================================================
-*/
-
-/*
-شروع کار فقط زمان شروع را نگه می‌دارد.
-
-تا وقتی کار تمام نشده،
-اطلاعات آن در activeTask قرار دارد.
-*/
-
-function startTask(topicOverride) {
-
-  const topic =
-    (topicOverride ?? $('topic').value).trim();
-
-  if (!topic) return;
-
-
-  $('topic').value = topic;
-
-
-  activeTask = {
-
-    topic,
-
-    start: Date.now(),
-
-    breaks: []
-
-  };
-
-
-  activeBreak = null;
-
-
-  $('topicDialog').close();
-
-
-  /*
-  متن دکمه تغییر می‌کند تا کاربر بفهمد
-  اکنون یک کار در حال اجراست.
-  */
-
-  $('taskTap').textContent =
-    'پایان کار';
-
-
-  /*
-  کنترل استراحت ظاهر می‌شود.
-  */
-
-  $('restControls').style.display =
-    'block';
-
-
-  $('restTap').textContent =
-    'شروع استراحت';
-
-}
-
-
-/*
-=========================================================
-پایان کار
-=========================================================
-*/
-
-function finishTask() {
-
-  if (!activeTask) return;
-
-
-  /*
-  اگر هنوز در حالت استراحت باشیم،
-  اجازه پایان کار نداریم.
-
-  ابتدا باید استراحت تمام شود.
-  */
-
-  if (activeBreak) {
-
-    alert(
-      'اول استراحت را پایان بده.'
-    );
-
-    return;
-
-  }
-
-
-  /*
-  حالا کار آماده ذخیره است.
-
-  اما هنوز کیفیت را نگرفته‌ایم،
-  بنابراین موقتاً در pendingTask نگه می‌داریم.
-  */
-
-  pendingTask = {
-
-    topic: activeTask.topic,
-
-    start: activeTask.start,
-
-    end: Date.now(),
-
-    breaks: [
-      ...(activeTask.breaks || [])
-    ]
-
-  };
-
-
-  /*
-  کار فعلی تمام شد.
-  */
-
-  activeTask = null;
-
-  activeBreak = null;
-
-
-  $('taskTap').textContent =
-    'ثبت کار';
-
-
-  $('restControls').style.display =
-    'none';
-
-
-  $('restTap').textContent =
-    'شروع استراحت';
-
-
-  /*
-  پنجره کیفیت باز می‌شود.
-  */
-
-  $('qualityDialog').showModal();
-
-}
-
-
-/*
-=========================================================
-شروع / پایان استراحت
-=========================================================
-*/
-
-/*
-اگر استراحت فعال نباشد:
-
-شروع استراحت
-
-و اگر استراحت فعال باشد:
-
-پایان استراحت
-
-انجام می‌شود.
-*/
-
-$('restTap').onclick = () => {
-
-  if (!activeTask) return;
-
-
-  /*
-  پایان استراحت
-  */
-
-  if (activeBreak) {
-
-    activeTask.breaks.push({
-
-      start: activeBreak.start,
-
-      end: Date.now()
-
-    });
-
-    activeBreak = null;
-
-    $('restTap').textContent =
-      'شروع استراحت';
-
-    return;
-
-  }
-
-
-  /*
-  شروع استراحت
-  */
-
-  activeBreak = {
-
-    start: Date.now()
-
-  };
-
-
-  $('restTap').textContent =
-    'پایان استراحت';
-
-};
-
-
-/*
-=========================================================
-ثبت کیفیت
-=========================================================
-*/
-
-/*
-وقتی کار تمام می‌شود،
-کاربر از 1 تا 5 کیفیت را انتخاب می‌کند.
-*/
-
-document
-  .querySelectorAll('.quality-btn')
-  .forEach(button => {
-
-    button.onclick = () => {
-
-      if (!pendingTask) return;
-
-
-      /*
-      عدد انتخاب‌شده را ذخیره می‌کنیم.
-      */
-
-      pendingTask.quality =
-        Number(
-          button.dataset.quality
-        );
-
-
-      /*
-      کار را به آرشیو اضافه می‌کنیم.
-      */
-
-      const a = loadTasks();
-
-      a.push(pendingTask);
-
-      saveTasks(a);
-
-
-      /*
-      دیگر کار موقت نیست.
-      */
-
-      pendingTask = null;
-
-
-      $('qualityDialog').close();
-
-      renderTasks();
-
-    };
-
-  });
-
-
-/*
-=========================================================
-نمایش کارها
-=========================================================
-*/
-
-function renderTasks() {
-
-  render();
-
-}
-
-
-/*
-=========================================================
-پیشنهاد اهداف داخل پنجره ثبت
-=========================================================
-*/
-
-/*
-mode مشخص می‌کند کاربر در حالت:
-
-time
-
-یا:
-
-task
-
-قرار دارد.
-*/
-
-function renderGoalSuggestions(
-  mode = dialogMode
-) {
-
-  const box =
-    $('goalSuggestions');
-
-  box.innerHTML = '';
-
-
-  /*
-  فقط اهداف انجام‌نشده را می‌گیریم
-  و سه مورد اول را نشان می‌دهیم.
-  */
-
-  const matches =
-    loadGoals()
-      .filter(g => !g.done)
-      .slice(0, 3);
-
-
-  matches.forEach(g => {
-
-    const b =
-      document.createElement('button');
-
-    b.type = 'button';
-
-    b.className = 'btn';
-
-    b.style.cssText =
-      'width:100%;margin-bottom:8px;text-align:right';
-
-    b.textContent = g.text;
-
-
-    b.onclick = () => {
-
-
-      /*
-      اگر در حالت ثبت کار باشیم،
-      انتخاب هدف باعث شروع همان کار می‌شود.
-      */
-
-      if (mode === 'task') {
-
-        startTask(g.text);
-
-
-        if (activeTask) {
-
-          const a = loadGoals();
-
-          const index =
-            a.findIndex(
-              x => x.text === g.text && !x.done
-            );
-
-
-          if (index !== -1) {
-
-            a[index].done = true;
-
-            saveGoals(a);
-
-            renderGoals();
-
-          }
-
-        }
-
+        $('lockScreen').style.display = 'none';
 
       } else {
 
+        $('accessCode').focus();
 
-        /*
-        اگر در حالت ثبت لحظه‌ای باشیم،
-        همان هدف به عنوان فعالیت ثبت می‌شود.
-        */
+      }
 
-        const a = loadGoals();
-
-        const index =
-          a.findIndex(
-            x => x.text === g.text && !x.done
-          );
+    }
 
 
-        if (index !== -1) {
+    $('unlockButton').onclick = () => {
 
-          a[index].done = true;
+      const code = $('accessCode').value;
 
-          saveGoals(a);
+      if (code === ACCESS_CODE) {
 
-          renderGoals();
+        localStorage.setItem(ACCESS_KEY, '1');
 
-        }
+        $('lockScreen').style.display = 'none';
 
+      } else {
 
-        saveTopic(g.text);
+        $('lockError').style.display = 'block';
+
+        $('accessCode').value = '';
+
+        $('accessCode').focus();
 
       }
 
     };
 
 
-    box.appendChild(b);
+    $('accessCode').addEventListener('keydown', e => {
 
-  });
+      if (e.key === 'Enter') {
 
-}
+        $('unlockButton').click();
 
-
-/*
-=========================================================
-نمایش ثبت‌های امروز
-=========================================================
-*/
-
-/*
-آرشیو کامل پاک نمی‌شود.
-
-فقط اطلاعات روز جاری از آرشیو جدا شده
-و در این قسمت نمایش داده می‌شود.
-*/
-
-function render() {
-
-  const box =
-    $('drawerEntries');
-
-
-  const a =
-    entriesForDate(
-      todayKey()
-    );
-
-
-  const t =
-    tasksForDate(
-      todayKey()
-    );
-
-
-  box.innerHTML = '';
-
-
-  /*
-  اگر هیچ چیزی امروز ثبت نشده باشد.
-  */
-
-  if (!a.length && !t.length) {
-
-    box.innerHTML =
-      '<div class="empty">امروز چیزی ثبت نشده.</div>';
-
-    return;
-
-  }
-
-
-  /*
-  ثبت‌های لحظه‌ای
-  */
-
-  a.forEach(e => {
-
-    const r =
-      document.createElement('div');
-
-    r.className = 'row';
-
-    r.innerHTML =
-      `<span class="time">${fmt(e.timestamp)}</span>
-       <span class="topic"></span>`;
-
-
-    r.querySelector('.topic').textContent =
-      e.topic;
-
-
-    box.appendChild(r);
-
-  });
-
-
-  /*
-  کارهای بازه‌ای
-  */
-
-  t.forEach(x => {
-
-    const r =
-      document.createElement('div');
-
-    r.className = 'row';
-
-
-    r.innerHTML =
-      `<span class="time">
-        ${fmt(x.start)} تا ${fmt(x.end)}
-      </span>
-      <span class="topic"></span>`;
-
-
-    /*
-    اطلاعات کار
-
-    مثال:
-
-    مطالعه AI — کیفیت 4/5 — استراحت 23 دقیقه
-    */
-
-    r.querySelector('.topic').textContent =
-      x.quality
-        ? `${x.topic} — کیفیت ${x.quality}/5 — استراحت ${formatDuration(totalBreakMs(x))}`
-        : x.topic +
-          ` — استراحت ${formatDuration(totalBreakMs(x))}`;
-
-
-    box.appendChild(r);
-
-  });
-
-}
-
-
-/*
-=========================================================
-ساعت
-=========================================================
-*/
-
-/*
-ساعت دستگاه را نمایش می‌دهد.
-*/
-
-function clock() {
-
-  $('clock').textContent =
-    new Date().toLocaleTimeString(
-      'fa-IR',
-      {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
       }
-    );
 
-}
+    });
 
 
-/*
-=========================================================
-حالت پنجره ثبت
-=========================================================
-*/
+    /* ==================================================
+       ثبت زمان‌های ساده
+    ================================================== */
 
-let dialogMode = 'time';
+    function load() {
 
+      return JSON.parse(
+        localStorage.getItem(KEY) || '[]'
+      );
 
-/*
-دکمه لغو
-*/
+    }
 
-$('cancel').onclick =
-  () => $('topicDialog').close();
 
+    function save(a) {
 
-/*
-=========================================================
-ثبت زمان از پنجره
-=========================================================
-*/
+      localStorage.setItem(
+        KEY,
+        JSON.stringify(a)
+      );
 
-function saveTimeFromDialog() {
+    }
 
-  const topic =
-    $('topic').value.trim();
 
+    function saveTopic(topic) {
 
-  if (!topic) return;
+      const a = load();
 
+      a.push({
 
-  saveTopic(topic);
+        timestamp: Date.now(),
 
-}
+        topic: topic
 
+      });
 
-$('save').onclick =
-  saveTimeFromDialog;
+      save(a);
 
+      $('topicDialog').close();
 
-/*
-=========================================================
-دکمه ثبت زمان
-=========================================================
-*/
+      render();
 
-$('tap').onclick = () => {
+      renderGoalSuggestions();
 
-  dialogMode = 'time';
+    }
 
-  $('topic').value = '';
 
-  renderGoalSuggestions('time');
+    /* ==================================================
+       زمان و تاریخ
+    ================================================== */
 
-  $('save').onclick =
-    saveTimeFromDialog;
+    function fmt(ts) {
 
-  $('topicDialog').showModal();
+      return new Date(ts).toLocaleTimeString(
+        'fa-IR',
+        {
+          hour: '2-digit',
+          minute: '2-digit'
+        }
+      );
 
+    }
 
-  setTimeout(
-    () => $('topic').focus(),
-    50
-  );
 
-};
+    function fmtDateTime(ts) {
 
+      return new Date(ts).toLocaleString(
+        'fa-IR',
+        {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit'
+        }
+      );
 
-/*
-=========================================================
-دکمه ثبت کار
-=========================================================
-*/
+    }
 
-$('taskTap').onclick = () => {
 
+    function dateKey(ts) {
 
-  /*
-  اگر یک کار در حال انجام است،
-  کلیک روی دکمه یعنی پایان کار.
-  */
+      const d = new Date(ts);
 
-  if (activeTask) {
+      const y = d.getFullYear();
 
-    finishTask();
+      const m = String(
+        d.getMonth() + 1
+      ).padStart(2, '0');
 
-    return;
+      const day = String(
+        d.getDate()
+      ).padStart(2, '0');
 
-  }
+      return `${y}-${m}-${day}`;
 
+    }
 
-  /*
-  در غیر این صورت،
-  پنجره شروع کار باز می‌شود.
-  */
 
-  dialogMode = 'task';
+    function todayKey() {
 
-  $('topic').value = '';
+      return dateKey(Date.now());
 
-  renderGoalSuggestions('task');
+    }
 
 
-  $('save').onclick =
-    () => startTask();
+    function entriesForDate(date) {
 
+      return load().filter(
+        x => dateKey(x.timestamp) === date
+      );
 
-  $('topicDialog').showModal();
+    }
 
 
-  setTimeout(
-    () => $('topic').focus(),
-    50
-  );
+    /* ==================================================
+       اهداف
+    ================================================== */
 
-};
+    function loadGoals() {
 
+      return JSON.parse(
+        localStorage.getItem(GOAL_KEY) || '[]'
+      );
 
-/*
-وقتی متن ورودی تغییر می‌کند،
-پیشنهادهای اهداف دوباره ساخته می‌شوند.
-*/
+    }
 
-$('topic').oninput = () =>
-  renderGoalSuggestions(
-    dialogMode
-  );
 
+    function saveGoals(goals) {
 
-/*
-با Enter دکمه ذخیره اجرا می‌شود.
-*/
+      localStorage.setItem(
+        GOAL_KEY,
+        JSON.stringify(goals)
+      );
 
-$('topic').onkeydown = e => {
+    }
 
-  if (e.key === 'Enter') {
 
-    $('save').click();
+    function renderGoals() {
 
-  }
+      const goals = loadGoals();
 
-};
+      $('goals').innerHTML = `
+        <h2>اهداف فردا</h2>
+      `;
 
+      goals.forEach((g, i) => {
 
-/*
-=========================================================
-افزودن هدف
-=========================================================
-*/
+        const div = document.createElement('div');
 
-/*
-ساختار هدف جدید:
+        div.className = 'goalItem';
 
-{
-  text,
-  done,
-  startTime,
-  endTime
-}
-*/
+        div.innerHTML = `
 
-function addGoal(event) {
+          <input
+            type="checkbox"
+            ${g.done ? 'checked' : ''}
+          >
 
-  if (event)
-    event.preventDefault();
+          <div class="goalText">
 
+            <div>
+              ${g.text}
+            </div>
 
-  const text =
-    $('goalInput').value.trim();
+            ${
+              g.startTime && g.endTime
+                ? `
+                  <div class="goalTime">
+                    ${g.startTime} تا ${g.endTime}
+                  </div>
+                `
+                : ''
+            }
 
+          </div>
 
-  const startTime =
-    $('goalStart').value;
+          <button class="deleteGoal">
+            حذف
+          </button>
+        `;
 
 
-  const endTime =
-    $('goalEnd').value;
+        const checkbox =
+          div.querySelector('input');
 
+        checkbox.onchange = () => {
 
-  /*
-  هدف بدون متن قابل ثبت نیست.
-  */
+          goals[i].done =
+            checkbox.checked;
 
-  if (!text) {
+          saveGoals(goals);
 
-    $('goalInput').focus();
+          renderGoals();
 
-    return;
+          renderGoalSuggestions();
 
-  }
+        };
 
 
-  /*
-  اگر هر دو زمان وجود داشته باشند،
-  زمان پایان نباید قبل یا مساوی زمان شروع باشد.
-  */
+        div.querySelector('.deleteGoal').onclick = () => {
 
-  if (
-    startTime &&
-    endTime &&
-    startTime >= endTime
-  ) {
+          goals.splice(i, 1);
 
-    alert(
-      'زمان پایان باید بعد از زمان شروع باشد.'
-    );
+          saveGoals(goals);
 
-    return;
+          renderGoals();
 
-  }
+          renderGoalSuggestions();
 
+        };
 
-  const a =
-    loadGoals();
 
-
-  a.push({
-
-    text,
-
-    done: false,
-
-    startTime,
-
-    endTime
-
-  });
-
-
-  saveGoals(a);
-
-
-  /*
-  فرم را خالی می‌کنیم.
-  */
-
-  $('goalInput').value = '';
-
-  $('goalStart').value = '';
-
-  $('goalEnd').value = '';
-
-
-  renderGoals();
-
-}
-
-
-/*
-دکمه افزودن هدف
-*/
-
-$('addGoal')
-  .addEventListener(
-    'click',
-    addGoal
-  );
-
-
-/*
-Enter داخل عنوان هدف
-*/
-
-$('goalInput').onkeydown = e => {
-
-  if (e.key === 'Enter') {
-
-    addGoal();
-
-  }
-
-};
-
-
-/*
-=========================================================
-گزارش
-=========================================================
-*/
-
-/*
-گزارش برای هر تاریخی که کاربر انتخاب کند ساخته می‌شود.
-*/
-
-$('report').onclick = () => {
-
-  const date =
-    $('reportDate').value ||
-    todayKey();
-
-
-  const a =
-    entriesForDate(date);
-
-
-  const t =
-    tasksForDate(date);
-
-
-  /*
-  عنوان گزارش
-  */
-
-  $('reportText').innerHTML =
-    '<h4>گزارش ' +
-    date +
-    '</h4>';
-
-
-  const box =
-    document.createElement('div');
-
-
-  /*
-  اگر هیچ داده‌ای وجود نداشت.
-  */
-
-  if (!a.length && !t.length) {
-
-    box.innerHTML =
-      '<div class="empty">برای این روز موردی ثبت نشده.</div>';
-
-  }
-
-
-  /*
-  ثبت‌های لحظه‌ای
-  */
-
-  a.forEach(e => {
-
-    const r =
-      document.createElement('div');
-
-    r.className = 'row';
-
-
-    r.innerHTML =
-      `<span class="time">
-        ${fmtDateTime(e.timestamp)}
-      </span>
-      <span class="topic"></span>`;
-
-
-    r.querySelector('.topic').textContent =
-      e.topic;
-
-
-    box.appendChild(r);
-
-  });
-
-
-  /*
-  کارهای بازه‌ای
-  */
-
-  t.forEach(x => {
-
-    const r =
-      document.createElement('div');
-
-    r.className = 'row';
-
-
-    r.innerHTML =
-      `<span class="time">
-        ${fmtDateTime(x.start)}
-        تا
-        ${fmtDateTime(x.end)}
-      </span>
-      <span class="topic"></span>`;
-
-
-    /*
-    متن اصلی کار
-    */
-
-    r.querySelector('.topic').textContent =
-      x.quality
-        ? `${x.topic} — کیفیت ${x.quality}/5 — استراحت ${formatDuration(totalBreakMs(x))}`
-        : x.topic +
-          ` — استراحت ${formatDuration(totalBreakMs(x))}`;
-
-
-    /*
-    نمایش دقیق زمان‌های استراحت
-    */
-
-    if ((x.breaks || []).length) {
-
-      x.breaks.forEach(b => {
-
-        const br =
-          document.createElement('div');
-
-        br.style.cssText =
-          'font-size:13px;color:#777;padding:5px 0 0 0';
-
-
-        br.textContent =
-          'استراحت: ' +
-          fmtDateTime(b.start) +
-          ' تا ' +
-          fmtDateTime(b.end);
-
-
-        r.appendChild(br);
+        $('goals').appendChild(div);
 
       });
 
     }
 
 
-    box.appendChild(r);
+    function addGoal(event) {
 
-  });
+      if (event) {
 
+        event.preventDefault();
 
-  $('reportText')
-    .appendChild(box);
+      }
 
+      const text =
+        $('goalInput').value.trim();
 
-  $('reportDialog')
-    .showModal();
+      const start =
+        $('goalStart').value;
 
-};
-
-
-/*
-=========================================================
-منوی کناری
-=========================================================
-*/
-
-/*
-دکمه منو باز و بسته کردن drawer را انجام می‌دهد.
-*/
-
-$('menuButton').onclick = () => {
-
-  const open =
-    $('drawer')
-      .classList
-      .toggle('open');
+      const end =
+        $('goalEnd').value;
 
 
-  $('drawerBackdrop')
-    .classList
-    .toggle(
-      'show',
-      open
+      if (!text) {
+
+        alert('متن هدف را وارد کن.');
+
+        return;
+
+      }
+
+
+      if (start && end && start >= end) {
+
+        alert(
+          'زمان شروع باید قبل از زمان پایان باشد.'
+        );
+
+        return;
+
+      }
+
+
+      const goals = loadGoals();
+
+      goals.push({
+
+        text: text,
+
+        done: false,
+
+        startTime: start,
+
+        endTime: end
+
+      });
+
+
+      saveGoals(goals);
+
+      $('goalInput').value = '';
+
+      $('goalStart').value = '';
+
+      $('goalEnd').value = '';
+
+      renderGoals();
+
+      renderGoalSuggestions();
+
+    }
+
+
+    $('addGoal').onclick = addGoal;
+
+
+    $('goalInput').addEventListener(
+      'keydown',
+      e => {
+
+        if (e.key === 'Enter') {
+
+          addGoal(e);
+
+        }
+
+      }
     );
 
 
-  $('menuButton')
-    .setAttribute(
-      'aria-expanded',
-      String(open)
+    /* ==================================================
+       کارها
+    ================================================== */
+
+    function loadTasks() {
+
+      return JSON.parse(
+        localStorage.getItem(TASK_KEY) || '[]'
+      );
+
+    }
+
+
+    function saveTasks(tasks) {
+
+      localStorage.setItem(
+        TASK_KEY,
+        JSON.stringify(tasks)
+      );
+
+    }
+
+
+    function startTask(topicOverride) {
+
+      const topic =
+        topicOverride ||
+        $('topic').value.trim();
+
+
+      if (!topic) {
+
+        alert('موضوع کار را وارد کن.');
+
+        return;
+
+      }
+
+
+      activeTask = {
+
+        topic: topic,
+
+        start: Date.now(),
+
+        breaks: []
+
+      };
+
+
+      activeBreak = null;
+
+
+      $('topicDialog').close();
+
+      $('taskTap').textContent =
+        'پایان کار';
+
+      $('restControls').style.display =
+        'block';
+
+      $('restTap').textContent =
+        'شروع استراحت';
+
+    }
+
+
+    function finishTask() {
+
+      if (!activeTask) {
+
+        return;
+
+      }
+
+
+      if (activeBreak) {
+
+        alert(
+          'اول استراحت را پایان بده.'
+        );
+
+        return;
+
+      }
+
+
+      pendingTask = {
+
+        topic: activeTask.topic,
+
+        start: activeTask.start,
+
+        end: Date.now(),
+
+        breaks: activeTask.breaks,
+
+        quality: null
+
+      };
+
+
+      activeTask = null;
+
+      activeBreak = null;
+
+
+      $('taskTap').textContent =
+        'ثبت کار';
+
+      $('restControls').style.display =
+        'none';
+
+
+      $('qualityDialog').showModal();
+
+    }
+
+
+    /* ==================================================
+       استراحت
+    ================================================== */
+
+    $('restTap').onclick = () => {
+
+      if (!activeTask) {
+
+        return;
+
+      }
+
+
+      if (!activeBreak) {
+
+        activeBreak = {
+
+          start: Date.now()
+
+        };
+
+        $('restTap').textContent =
+          'پایان استراحت';
+
+      } else {
+
+        activeTask.breaks.push({
+
+          start: activeBreak.start,
+
+          end: Date.now()
+
+        });
+
+        activeBreak = null;
+
+        $('restTap').textContent =
+          'شروع استراحت';
+
+      }
+
+    };
+
+
+    /* ==================================================
+       کیفیت کار
+    ================================================== */
+
+    document
+      .querySelectorAll(
+        '#qualityDialog [data-quality]'
+      )
+      .forEach(button => {
+
+        button.onclick = () => {
+
+          if (!pendingTask) {
+
+            return;
+
+          }
+
+
+          pendingTask.quality =
+            Number(
+              button.dataset.quality
+            );
+
+
+          const tasks = loadTasks();
+
+          tasks.push(pendingTask);
+
+          saveTasks(tasks);
+
+
+          pendingTask = null;
+
+
+          $('qualityDialog').close();
+
+          renderTasks();
+
+        };
+
+      });
+
+
+    /* ==================================================
+       محاسبه استراحت
+    ================================================== */
+
+    function totalBreakMs(task) {
+
+      return (task.breaks || []).reduce(
+        (sum, b) => {
+
+          if (
+            b.start &&
+            b.end
+          ) {
+
+            return sum +
+              (b.end - b.start);
+
+          }
+
+          return sum;
+
+        },
+        0
+      );
+
+    }
+
+
+    function formatDuration(ms) {
+
+      const minutes =
+        Math.round(ms / 60000);
+
+
+      if (minutes < 60) {
+
+        return `${minutes} دقیقه`;
+
+      }
+
+
+      const hours =
+        Math.floor(minutes / 60);
+
+      const rest =
+        minutes % 60;
+
+
+      if (rest === 0) {
+
+        return `${hours} ساعت`;
+
+      }
+
+
+      return `${hours} ساعت و ${rest} دقیقه`;
+
+    }
+
+
+    /* ==================================================
+       پیشنهاد اهداف
+    ================================================== */
+
+    function renderGoalSuggestions(
+      mode = dialogMode
+    ) {
+
+      const container =
+        $('goalSuggestions');
+
+      container.innerHTML = '';
+
+
+      const goals =
+        loadGoals()
+          .filter(g => !g.done)
+          .slice(0, 3);
+
+
+      goals.forEach(g => {
+
+        const div =
+          document.createElement('div');
+
+        div.className =
+          'suggestion';
+
+        div.textContent =
+          g.text;
+
+
+        div.onclick = () => {
+
+          if (mode === 'task') {
+
+            startTask(g.text);
+
+          } else {
+
+            saveTopic(g.text);
+
+          }
+
+
+          const allGoals =
+            loadGoals();
+
+          const index =
+            allGoals.findIndex(
+              x =>
+                x.text === g.text &&
+                !x.done
+            );
+
+
+          if (index !== -1) {
+
+            allGoals[index].done =
+              true;
+
+            saveGoals(allGoals);
+
+            renderGoals();
+
+          }
+
+        };
+
+
+        container.appendChild(div);
+
+      });
+
+    }
+
+
+    /* ==================================================
+       ثبت زمان
+    ================================================== */
+
+    $('tap').onclick = () => {
+
+      dialogMode = 'time';
+
+      $('topic').value = '';
+
+      $('topicDialogTitle').textContent =
+        'ثبت زمان';
+
+      renderGoalSuggestions('time');
+
+
+      $('save').onclick = () => {
+
+        const topic =
+          $('topic').value.trim();
+
+
+        if (!topic) {
+
+          alert('موضوع را وارد کن.');
+
+          return;
+
+        }
+
+
+        saveTopic(topic);
+
+      };
+
+
+      $('topicDialog').showModal();
+
+    };
+
+
+    /* ==================================================
+       ثبت کار
+    ================================================== */
+
+    $('taskTap').onclick = () => {
+
+      if (activeTask) {
+
+        finishTask();
+
+        return;
+
+      }
+
+
+      dialogMode = 'task';
+
+      $('topic').value = '';
+
+      $('topicDialogTitle').textContent =
+        'شروع کار';
+
+      renderGoalSuggestions('task');
+
+
+      $('save').onclick = () => {
+
+        startTask();
+
+      };
+
+
+      $('topicDialog').showModal();
+
+    };
+
+
+    /* ==================================================
+       لغو دیالوگ
+    ================================================== */
+
+    $('cancel').onclick = () => {
+
+      $('topicDialog').close();
+
+    };
+
+
+    /* ==================================================
+       نمایش کارهای یک روز
+    ================================================== */
+
+    function tasksForDate(date) {
+
+      return loadTasks().filter(
+        x => dateKey(x.start) === date
+      );
+
+    }
+
+
+    /* ==================================================
+       حذف یک مورد از گزارش
+    ================================================== */
+
+    function deleteReportItem(
+      type,
+      id
+    ) {
+
+      const confirmed =
+        confirm(
+          'این مورد حذف شود؟'
+        );
+
+
+      if (!confirmed) {
+
+        return;
+
+      }
+
+
+      /* -------------------------
+         حذف ثبت زمان
+      ------------------------- */
+
+      if (type === 'time') {
+
+        let entries = load();
+
+        entries =
+          entries.filter(
+            x =>
+              x.timestamp !== id
+          );
+
+        save(entries);
+
+      }
+
+
+      /* -------------------------
+         حذف کار
+      ------------------------- */
+
+      if (type === 'task') {
+
+        let tasks = loadTasks();
+
+        tasks =
+          tasks.filter(
+            x =>
+              x.start !== id
+          );
+
+        saveTasks(tasks);
+
+      }
+
+
+      /* دوباره نمایش گزارش */
+
+      showReport();
+
+
+      /* به‌روزرسانی صفحه اصلی */
+
+      render();
+
+    }
+
+
+    /* ==================================================
+       ساخت گزارش
+    ================================================== */
+
+    function showReport() {
+
+      const date =
+        $('reportDate').value;
+
+
+      const entries =
+        entriesForDate(date);
+
+
+      const tasks =
+        tasksForDate(date);
+
+
+      let html = '';
+
+
+      /* -------------------------
+         اگر چیزی وجود نداشت
+      ------------------------- */
+
+      if (
+        entries.length === 0 &&
+        tasks.length === 0
+      ) {
+
+        html = `
+          <p>
+            برای این روز چیزی ثبت نشده.
+          </p>
+        `;
+
+      }
+
+
+      /* -------------------------
+         ثبت زمان‌ها
+      ------------------------- */
+
+      entries.forEach(e => {
+
+        html += `
+
+          <div class="reportItem">
+
+            <div class="reportItemContent">
+
+              <div>
+                <strong>
+                  ثبت زمان
+                </strong>
+              </div>
+
+              <div>
+                ${fmtDateTime(e.timestamp)}
+              </div>
+
+              <div>
+                ${e.topic}
+              </div>
+
+            </div>
+
+            <button
+              class="deleteReportBtn"
+              onclick="
+                deleteReportItem(
+                  'time',
+                  ${e.timestamp}
+                )
+              "
+            >
+              حذف
+            </button>
+
+          </div>
+
+        `;
+
+      });
+
+
+      /* -------------------------
+         کارها
+      ------------------------- */
+
+      tasks.forEach(t => {
+
+        const breakMs =
+          totalBreakMs(t);
+
+
+        let breaksHtml = '';
+
+
+        if (
+          t.breaks &&
+          t.breaks.length > 0
+        ) {
+
+          breaksHtml =
+            t.breaks
+              .map(b => `
+
+                <div>
+                  استراحت:
+                  ${fmt(b.start)}
+                  تا
+                  ${fmt(b.end)}
+                </div>
+
+              `)
+              .join('');
+
+        }
+
+
+        html += `
+
+          <div class="reportItem">
+
+            <div class="reportItemContent">
+
+              <div>
+                <strong>
+                  کار
+                </strong>
+              </div>
+
+              <div>
+                ${fmtDateTime(t.start)}
+                تا
+                ${fmtDateTime(t.end)}
+              </div>
+
+              <div>
+                ${t.topic}
+              </div>
+
+              <div>
+                کیفیت:
+                ${t.quality}/5
+              </div>
+
+              <div>
+                مجموع استراحت:
+                ${formatDuration(breakMs)}
+              </div>
+
+              ${breaksHtml}
+
+            </div>
+
+            <button
+              class="deleteReportBtn"
+              onclick="
+                deleteReportItem(
+                  'task',
+                  ${t.start}
+                )
+              "
+            >
+              حذف
+            </button>
+
+          </div>
+
+        `;
+
+      });
+
+
+      $('reportText').innerHTML =
+        html;
+
+
+      if (
+        !$('reportDialog').open
+      ) {
+
+        $('reportDialog').showModal();
+
+      }
+
+    }
+
+
+    /* ==================================================
+       دکمه گزارش
+    ================================================== */
+
+    $('report').onclick = () => {
+
+      showReport();
+
+    };
+
+
+    /* ==================================================
+       بستن گزارش
+    ================================================== */
+
+    $('closeReport').onclick = () => {
+
+      $('reportDialog').close();
+
+    };
+
+
+    /* ==================================================
+       رندر لیست امروز
+    ================================================== */
+
+    function render() {
+
+      const entries =
+        entriesForDate(
+          todayKey()
+        );
+
+
+      const tasks =
+        tasksForDate(
+          todayKey()
+        );
+
+
+      const container =
+        $('drawerEntries');
+
+
+      container.innerHTML = '';
+
+
+      if (
+        entries.length === 0 &&
+        tasks.length === 0
+      ) {
+
+        container.innerHTML =
+          '<p>امروز چیزی ثبت نشده.</p>';
+
+        return;
+
+      }
+
+
+      /* ثبت زمان‌ها */
+
+      entries.forEach(e => {
+
+        const div =
+          document.createElement('div');
+
+        div.className =
+          'entry';
+
+
+        div.innerHTML = `
+
+          <strong>
+            ${fmt(e.timestamp)}
+          </strong>
+
+          <br>
+
+          ${e.topic}
+
+        `;
+
+
+        container.appendChild(div);
+
+      });
+
+
+      /* کارها */
+
+      tasks.forEach(t => {
+
+        const div =
+          document.createElement('div');
+
+        div.className =
+          'entry';
+
+
+        const breakMs =
+          totalBreakMs(t);
+
+
+        div.innerHTML = `
+
+          <strong>
+            ${fmt(t.start)}
+            تا
+            ${fmt(t.end)}
+          </strong>
+
+          <br>
+
+          ${t.topic}
+
+          <br>
+
+          کیفیت:
+          ${t.quality}/5
+
+          <br>
+
+          استراحت:
+          ${formatDuration(breakMs)}
+
+        `;
+
+
+        container.appendChild(div);
+
+      });
+
+    }
+
+
+    function renderTasks() {
+
+      render();
+
+    }
+
+
+    /* ==================================================
+       منو
+    ================================================== */
+
+    $('menuButton').onclick = () => {
+
+      const drawer =
+        $('drawer');
+
+      const backdrop =
+        $('backdrop');
+
+
+      const isOpen =
+        drawer.classList.contains(
+          'open'
+        );
+
+
+      if (isOpen) {
+
+        drawer.classList.remove(
+          'open'
+        );
+
+        backdrop.classList.remove(
+          'show'
+        );
+
+        $('menuButton')
+          .setAttribute(
+            'aria-expanded',
+            'false'
+          );
+
+      } else {
+
+        drawer.classList.add(
+          'open'
+        );
+
+        backdrop.classList.add(
+          'show'
+        );
+
+        $('menuButton')
+          .setAttribute(
+            'aria-expanded',
+            'true'
+          );
+
+      }
+
+    };
+
+
+    $('backdrop').onclick = () => {
+
+      $('drawer').classList.remove(
+        'open'
+      );
+
+      $('backdrop').classList.remove(
+        'show'
+      );
+
+      $('menuButton')
+        .setAttribute(
+          'aria-expanded',
+          'false'
+        );
+
+    };
+
+
+    /* ==================================================
+       ساعت
+    ================================================== */
+
+    function clock() {
+
+      $('clock').textContent =
+        new Date().toLocaleTimeString(
+          'fa-IR',
+          {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+          }
+        );
+
+    }
+
+
+    /* ==================================================
+       شروع برنامه
+    ================================================== */
+
+    unlockApp();
+
+    clock();
+
+    setInterval(
+      clock,
+      1000
     );
 
-};
+
+    $('reportDate').value =
+      todayKey();
 
 
-/*
-با کلیک روی فضای پشت منو،
-drawer بسته می‌شود.
-*/
+    render();
 
-$('drawerBackdrop').onclick = () => {
+    renderGoals();
 
-  $('drawer')
-    .classList
-    .remove('open');
+    renderTasks();
 
 
-  $('drawerBackdrop')
-    .classList
-    .remove('show');
-
-
-  $('menuButton')
-    .setAttribute(
-      'aria-expanded',
-      'false'
+    setInterval(
+      render,
+      60000
     );
 
-};
-
-
-/*
-=========================================================
-بستن گزارش
-=========================================================
-*/
-
-$('closeReport').onclick =
-  () => $('reportDialog').close();
-
-
-/*
-=========================================================
-شروع برنامه
-=========================================================
-*/
-
-/*
-ابتدا بررسی می‌کنیم آیا کاربر قبلاً وارد شده است یا نه.
-
-سپس:
-
-- ساعت
-- گزارش روز
-- ثبت‌های امروز
-- اهداف
-
-نمایش داده می‌شوند.
-*/
-
-unlockApp();
-
-clock();
-
-
-/*
-ساعت هر یک ثانیه به‌روز می‌شود.
-*/
-
-setInterval(
-  clock,
-  1000
-);
-
-
-/*
-تاریخ گزارش به صورت پیش‌فرض امروز است.
-*/
-
-$('reportDate').value =
-  todayKey();
-
-
-/*
-نمایش اولیه
-*/
-
-render();
-
-renderGoals();
-
-renderTasks();
-
-
-/*
-ثبت‌های امروز هر 60 ثانیه دوباره نمایش داده می‌شوند.
-*/
-
-setInterval(
-  render,
-  60000
-);
-
-</script>
-
-</main>
+  </script>
 
 </body>
 </html>
